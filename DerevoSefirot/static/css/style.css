@@ -1,0 +1,1348 @@
+/* =====================================================
+   ARCANA ACCESS
+===================================================== */
+
+.arcana-access-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arcana-access-overlay {
+    position: absolute;
+    inset: 0;
+
+    background:
+        rgba(12, 8, 20, 0.78);
+
+    backdrop-filter: blur(8px);
+}
+
+
+.arcana-access-window {
+    position: relative;
+    z-index: 2;
+
+    width: min(420px, calc(100vw - 40px));
+
+    padding: 38px 32px;
+
+    border: 1px solid
+        rgba(218, 185, 120, 0.45);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(38, 27, 45, 0.98),
+            rgba(19, 15, 27, 0.98)
+        );
+
+    box-shadow:
+        0 25px 80px
+        rgba(0, 0, 0, 0.65),
+
+        inset 0 0 40px
+        rgba(196, 155, 85, 0.05);
+
+    color: #e9dcc3;
+    text-align: center;
+}
+
+
+.arcana-access-close {
+    position: absolute;
+
+    top: 12px;
+    right: 16px;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    background: transparent;
+
+    color:
+        rgba(233, 220, 195, 0.65);
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    transition:
+        color .2s ease,
+        transform .2s ease;
+}
+
+
+.arcana-access-close:hover {
+    color: #e1bd78;
+
+    transform:
+        rotate(90deg);
+}
+
+
+.arcana-access-title {
+    margin-bottom: 8px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 25px;
+
+    color: #e4c889;
+
+    letter-spacing: 0.04em;
+}
+
+
+.arcana-access-number {
+    margin-bottom: 18px;
+
+    font-size: 14px;
+
+    color:
+        rgba(233, 220, 195, 0.6);
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+
+.arcana-access-description {
+    margin-bottom: 22px;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    color:
+        rgba(233, 220, 195, 0.78);
+}
+
+
+.arcana-access-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.arcana-access-input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 16px;
+
+    border: 1px solid
+        rgba(218, 185, 120, 0.35);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background:
+        rgba(8, 6, 13, 0.65);
+
+    color: #f1dfbd;
+
+    font-size: 15px;
+
+    text-align: center;
+
+    letter-spacing: 0.08em;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.arcana-access-input:focus {
+    border-color:
+        rgba(224, 188, 116, 0.8);
+
+    box-shadow:
+        0 0 18px
+        rgba(224, 188, 116, 0.12);
+}
+
+
+.arcana-access-button {
+    width: 100%;
+
+    padding: 13px 18px;
+
+    border: 1px solid
+        rgba(218, 185, 120, 0.5);
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8d6834,
+            #c49b59
+        );
+
+    color: #fff8e9;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.arcana-access-button:hover {
+    box-shadow:
+        0 6px 25px
+        rgba(196, 155, 89, 0.25);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.arcana-access-button:disabled {
+    opacity: 0.6;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+
+.arcana-access-error {
+    padding: 9px 12px;
+
+    border-radius: 7px;
+
+    background:
+        rgba(120, 35, 35, 0.22);
+
+    border: 1px solid
+        rgba(180, 75, 75, 0.35);
+
+    color: #e6a7a7;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   ✦ ARCANA VIDEO SYSTEM
+===================================================== */
+
+.arcana-video-stage {
+
+    --video-color: #d8b56a;
+    --video-light: #fff0bb;
+    --video-glow:
+        rgba(215, 174, 91, .45);
+
+    position: relative;
+
+    width: 100%;
+
+    margin:
+        0 auto
+        24px;
+
+    padding:
+        10px 10px 0;
+
+    isolation: isolate;
+
+    opacity: 0;
+
+    transform:
+        translateY(22px)
+        scale(.96);
+
+    filter:
+        blur(7px);
+
+    transition:
+        opacity .7s cubic-bezier(.2,.8,.2,1),
+        transform .8s cubic-bezier(.2,.8,.2,1),
+        filter .8s ease;
+
+    z-index: 4;
+}
+
+
+.panel.has-arcana
+.arcana-video-stage {
+
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    filter:
+        blur(0);
+
+}
+
+
+/* =====================================================
+   VIDEO ENERGY
+===================================================== */
+
+.arcana-video-energy {
+
+    position: absolute;
+
+    left: 50%;
+    top: 48%;
+
+    width: 85%;
+    height: 70%;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            var(--video-glow),
+            transparent 65%
+        );
+
+    filter:
+        blur(40px);
+
+    opacity: .65;
+
+    z-index: -3;
+
+    animation:
+        arcanaVideoAura
+        6s ease-in-out
+        infinite;
+}
+
+
+/* =====================================================
+   VIDEO FRAME
+===================================================== */
+
+.arcana-video-frame {
+
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255,255,255,.05),
+            rgba(0,0,0,.88)
+        );
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--video-color) 55%,
+            transparent
+        );
+
+    box-shadow:
+
+        0 0 0 1px
+        rgba(255,255,255,.035)
+        inset,
+
+        0 0 15px
+        var(--video-glow),
+
+        0 0 40px
+        color-mix(
+            in srgb,
+            var(--video-color) 25%,
+            transparent
+        ),
+
+        0 18px 60px
+        rgba(0,0,0,.55);
+
+    transition:
+        box-shadow .7s ease,
+        border-color .7s ease,
+        transform .7s ease;
+
+}
+
+
+/* =====================================================
+   VIDEO ITSELF
+===================================================== */
+
+.arcana-video {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    background: #030406;
+
+    opacity: 0;
+
+    transform:
+        scale(1.075);
+
+    filter:
+        saturate(.82)
+        contrast(1.04)
+        brightness(.72);
+
+    transition:
+        opacity 1s cubic-bezier(.2,.8,.2,1),
+        transform 8s cubic-bezier(.2,.8,.2,1),
+        filter 1.2s ease;
+
+}
+
+
+/*
+ * Когда видео готово:
+ * оно медленно "входит" в пространство.
+ */
+
+.arcana-video-stage.video-ready
+.arcana-video {
+
+    opacity: .92;
+
+    transform:
+        scale(1);
+
+    filter:
+        saturate(1.08)
+        contrast(1.04)
+        brightness(.78);
+}
+
+
+/*
+ * При смене Аркана видео уходит в глубину.
+ */
+
+.arcana-video-stage.video-switching
+.arcana-video {
+
+    opacity: 0;
+
+    transform:
+        scale(1.045);
+
+    filter:
+        blur(8px)
+        saturate(.5);
+}
+
+
+/* =====================================================
+   VIDEO SHINE
+===================================================== */
+
+.arcana-video-shine {
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+
+        linear-gradient(
+            115deg,
+            transparent 0%,
+            transparent 38%,
+            rgba(255,255,255,.08) 49%,
+            rgba(255,255,255,.22) 50%,
+            rgba(255,255,255,.06) 51%,
+            transparent 63%,
+            transparent 100%
+        );
+
+    transform:
+        translateX(-130%);
+
+    opacity: .45;
+
+    mix-blend-mode:
+        screen;
+
+    animation:
+        videoShine
+        8s ease-in-out
+        infinite;
+}
+
+
+/* =====================================================
+   ELEMENTAL OVERLAY
+===================================================== */
+
+.arcana-video-frame::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 30%,
+            rgba(0,0,0,.08) 55%,
+            rgba(0,0,0,.62) 100%
+        );
+
+}
+
+
+/*
+ * Цветовой слой стихии.
+ */
+
+.arcana-video-frame::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 3;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--video-color) 10%,
+                transparent
+            ),
+            transparent 45%,
+            color-mix(
+                in srgb,
+                var(--video-color) 14%,
+                transparent
+            )
+        );
+
+    mix-blend-mode:
+        screen;
+
+    opacity: .55;
+
+}
+
+
+/* =====================================================
+   CORNERS
+===================================================== */
+
+.arcana-video-corner {
+
+    position: absolute;
+
+    width: 27px;
+    height: 27px;
+
+    z-index: 5;
+
+    pointer-events: none;
+
+    border-color:
+        var(--video-light);
+
+    opacity: .82;
+
+    filter:
+        drop-shadow(
+            0 0 7px
+            var(--video-color)
+        );
+
+}
+
+
+.corner-tl {
+
+    left: 12px;
+    top: 12px;
+
+    border-top: 1px solid;
+    border-left: 1px solid;
+}
+
+
+.corner-tr {
+
+    right: 12px;
+    top: 12px;
+
+    border-top: 1px solid;
+    border-right: 1px solid;
+}
+
+
+.corner-bl {
+
+    left: 12px;
+    bottom: 12px;
+
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+}
+
+
+.corner-br {
+
+    right: 12px;
+    bottom: 12px;
+
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+}
+
+
+/* =====================================================
+   RUNES
+===================================================== */
+
+.arcana-video-rune {
+
+    position: absolute;
+
+    z-index: 5;
+
+    color:
+        var(--video-light);
+
+    font-family:
+        Georgia,
+        serif;
+
+    pointer-events: none;
+
+    text-shadow:
+        0 0 7px var(--video-color),
+        0 0 18px var(--video-glow);
+
+    opacity: .45;
+
+}
+
+
+.rune-one {
+
+    left: 2px;
+    top: 35%;
+
+    font-size: 15px;
+
+    animation:
+        runeFloatOne
+        5s ease-in-out
+        infinite;
+}
+
+
+.rune-two {
+
+    right: 0;
+    top: 52%;
+
+    font-size: 13px;
+
+    animation:
+        runeFloatTwo
+        6s ease-in-out
+        infinite;
+}
+
+
+.rune-three {
+
+    left: 12%;
+    top: -2px;
+
+    font-size: 11px;
+
+    animation:
+        runeFloatThree
+        7s ease-in-out
+        infinite;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.arcana-video-loading {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 8;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(5,5,9,.68),
+            rgba(5,5,9,.92)
+        );
+
+    color:
+        var(--video-light);
+
+    font-size: 8px;
+
+    letter-spacing:
+        .35em;
+
+    transition:
+        opacity .5s ease;
+
+}
+
+
+.video-loading-symbol {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 32px;
+
+    color:
+        var(--video-light);
+
+    text-shadow:
+        0 0 15px var(--video-color),
+        0 0 35px var(--video-glow);
+
+    animation:
+        videoLoadingPulse
+        1.8s ease-in-out
+        infinite;
+}
+
+
+/* =====================================================
+   VIDEO ERROR
+===================================================== */
+
+.arcana-video-error {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 9;
+
+    display: none;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(12,10,15,.8),
+            rgba(3,4,6,.96)
+        );
+
+    color:
+        rgba(238,231,215,.45);
+
+    font-size: 9px;
+
+    letter-spacing:
+        .18em;
+
+    text-transform:
+        uppercase;
+
+    text-align: center;
+
+}
+
+
+.arcana-video-stage.video-error
+.arcana-video-error {
+
+    display: flex;
+
+}
+
+
+.video-error-symbol {
+
+    color:
+        var(--video-color);
+
+    font-size: 30px;
+
+    text-shadow:
+        0 0 20px var(--video-glow);
+
+}
+
+
+/* =====================================================
+   VIDEO CAPTION
+===================================================== */
+
+.arcana-video-caption {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 11px;
+
+    margin-top: 10px;
+
+    color:
+        var(--video-light);
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 8px;
+
+    letter-spacing:
+        .32em;
+
+    opacity: .58;
+
+}
+
+
+.video-caption-number {
+
+    color:
+        var(--video-color);
+
+}
+
+
+.video-caption-element {
+
+    opacity: .7;
+
+}
+
+
+.video-caption-line {
+
+    width: 35px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--video-color),
+            transparent
+        );
+
+    box-shadow:
+        0 0 7px
+        var(--video-glow);
+
+}
+
+
+/* =====================================================
+   ELEMENT — FIRE
+===================================================== */
+
+.arcana-video-stage[data-element="fire"]
+.arcana-video-frame {
+
+    animation:
+        fireVideoPulse
+        3.5s ease-in-out
+        infinite;
+}
+
+
+.arcana-video-stage[data-element="fire"]
+.arcana-video {
+
+    filter:
+        saturate(1.25)
+        contrast(1.08)
+        brightness(.76);
+}
+
+
+/* =====================================================
+   ELEMENT — WATER
+===================================================== */
+
+.arcana-video-stage[data-element="water"]
+.arcana-video-frame {
+
+    box-shadow:
+
+        0 0 0 1px
+        rgba(255,255,255,.035)
+        inset,
+
+        0 0 18px
+        var(--video-glow),
+
+        0 0 55px
+        color-mix(
+            in srgb,
+            var(--video-color) 28%,
+            transparent
+        ),
+
+        0 20px 65px
+        rgba(0,0,0,.58);
+}
+
+
+.arcana-video-stage[data-element="water"]
+.arcana-video {
+
+    filter:
+        saturate(1.12)
+        contrast(1.02)
+        brightness(.73)
+        hue-rotate(-3deg);
+}
+
+
+/* =====================================================
+   ELEMENT — AIR
+===================================================== */
+
+.arcana-video-stage[data-element="air"]
+.arcana-video {
+
+    filter:
+        saturate(.9)
+        contrast(.96)
+        brightness(.82);
+}
+
+
+.arcana-video-stage[data-element="air"]
+.arcana-video-frame {
+
+    box-shadow:
+
+        0 0 0 1px
+        rgba(255,255,255,.05)
+        inset,
+
+        0 0 20px
+        var(--video-glow),
+
+        0 0 65px
+        color-mix(
+            in srgb,
+            var(--video-color) 30%,
+            transparent
+        ),
+
+        0 18px 60px
+        rgba(0,0,0,.5);
+}
+
+
+/* =====================================================
+   ELEMENT — EARTH
+===================================================== */
+
+.arcana-video-stage[data-element="earth"]
+.arcana-video {
+
+    filter:
+        saturate(.88)
+        contrast(1.08)
+        brightness(.7);
+}
+
+
+.arcana-video-stage[data-element="earth"]
+.arcana-video-frame {
+
+    box-shadow:
+
+        0 0 0 1px
+        rgba(255,255,255,.03)
+        inset,
+
+        0 0 16px
+        var(--video-glow),
+
+        0 0 48px
+        color-mix(
+            in srgb,
+            var(--video-color) 25%,
+            transparent
+        ),
+
+        0 22px 65px
+        rgba(0,0,0,.62);
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes arcanaVideoAura {
+
+    0%,
+    100% {
+
+        transform:
+            translate(-50%, -50%)
+            scale(.88);
+
+        opacity: .42;
+
+    }
+
+    50% {
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.08);
+
+        opacity: .75;
+
+    }
+
+}
+
+
+@keyframes videoShine {
+
+    0% {
+
+        transform:
+            translateX(-130%);
+
+    }
+
+    25%,
+    100% {
+
+        transform:
+            translateX(130%);
+
+    }
+
+}
+
+
+@keyframes videoLoadingPulse {
+
+    0%,
+    100% {
+
+        opacity: .45;
+
+        transform:
+            scale(.88);
+
+    }
+
+    50% {
+
+        opacity: 1;
+
+        transform:
+            scale(1.12);
+
+    }
+
+}
+
+
+@keyframes fireVideoPulse {
+
+    0%,
+    100% {
+
+        box-shadow:
+
+            0 0 0 1px
+            rgba(255,255,255,.035)
+            inset,
+
+            0 0 15px
+            var(--video-glow),
+
+            0 0 40px
+            color-mix(
+                in srgb,
+                var(--video-color) 25%,
+                transparent
+            ),
+
+            0 18px 60px
+            rgba(0,0,0,.55);
+
+    }
+
+    50% {
+
+        box-shadow:
+
+            0 0 0 1px
+            rgba(255,255,255,.04)
+            inset,
+
+            0 0 25px
+            var(--video-glow),
+
+            0 0 75px
+            color-mix(
+                in srgb,
+                var(--video-color) 40%,
+                transparent
+            ),
+
+            0 18px 60px
+            rgba(0,0,0,.55);
+
+    }
+
+}
+
+
+@keyframes runeFloatOne {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0)
+            rotate(0deg);
+
+        opacity: .28;
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-10px)
+            rotate(12deg);
+
+        opacity: .72;
+
+    }
+
+}
+
+
+@keyframes runeFloatTwo {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0)
+            rotate(0deg);
+
+        opacity: .25;
+
+    }
+
+    50% {
+
+        transform:
+            translateY(9px)
+            rotate(-10deg);
+
+        opacity: .65;
+
+    }
+
+}
+
+
+@keyframes runeFloatThree {
+
+    0%,
+    100% {
+
+        transform:
+            translateX(0)
+            rotate(0deg);
+
+        opacity: .2;
+
+    }
+
+    50% {
+
+        transform:
+            translateX(14px)
+            rotate(180deg);
+
+        opacity: .65;
+
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .arcana-video-stage {
+
+        margin-bottom:
+            20px;
+
+        padding:
+            7px 7px 0;
+
+    }
+
+
+    .arcana-video-frame {
+
+        border-radius:
+            11px;
+
+    }
+
+
+    .arcana-video-caption {
+
+        font-size:
+            7px;
+
+        letter-spacing:
+            .25em;
+
+    }
+
+
+    .arcana-video-rune {
+
+        display:
+            none;
+
+    }
+
+}
+
+
+@media (max-width: 560px) {
+
+    .arcana-video-stage {
+
+        margin-bottom:
+            17px;
+
+    }
+
+
+    .arcana-video-frame {
+
+        aspect-ratio:
+            16 / 10;
+
+    }
+
+
+    .arcana-video-caption {
+
+        gap:
+            7px;
+
+        letter-spacing:
+            .18em;
+
+    }
+
+
+    .video-caption-line {
+
+        width:
+            20px;
+
+    }
+
+}
+    
