@@ -1,0 +1,244 @@
+/* =====================================================
+   ARCANA ACCESS
+   ===================================================== */
+
+.arcana-access-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arcana-access-overlay {
+    position: absolute;
+    inset: 0;
+
+    background:
+        rgba(12, 8, 20, 0.78);
+
+    backdrop-filter: blur(8px);
+}
+
+
+.arcana-access-window {
+    position: relative;
+    z-index: 2;
+
+    width: min(420px, calc(100vw - 40px));
+
+    padding: 38px 32px;
+
+    border: 1px solid
+        rgba(218, 185, 120, 0.45);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(38, 27, 45, 0.98),
+            rgba(19, 15, 27, 0.98)
+        );
+
+    box-shadow:
+        0 25px 80px
+        rgba(0, 0, 0, 0.65),
+
+        inset 0 0 40px
+        rgba(196, 155, 85, 0.05);
+
+    color: #e9dcc3;
+
+    text-align: center;
+}
+
+
+.arcana-access-close {
+    position: absolute;
+
+    top: 12px;
+    right: 16px;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    background: transparent;
+
+    color: rgba(233, 220, 195, 0.65);
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    transition:
+        color .2s ease,
+        transform .2s ease;
+}
+
+.arcana-access-close:hover {
+    color: #e1bd78;
+
+    transform:
+        rotate(90deg);
+}
+
+
+.arcana-access-title {
+    margin-bottom: 8px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 25px;
+
+    color: #e4c889;
+
+    letter-spacing: 0.04em;
+}
+
+
+.arcana-access-number {
+    margin-bottom: 18px;
+
+    font-size: 14px;
+
+    color:
+        rgba(233, 220, 195, 0.6);
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+
+.arcana-access-description {
+    margin-bottom: 22px;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    color:
+        rgba(233, 220, 195, 0.78);
+}
+
+
+.arcana-access-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.arcana-access-input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 16px;
+
+    border: 1px solid
+        rgba(218, 185, 120, 0.35);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background:
+        rgba(8, 6, 13, 0.65);
+
+    color: #f1dfbd;
+
+    font-size: 15px;
+
+    text-align: center;
+
+    letter-spacing: 0.08em;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.arcana-access-input:focus {
+    border-color:
+        rgba(224, 188, 116, 0.8);
+
+    box-shadow:
+        0 0 18px
+        rgba(224, 188, 116, 0.12);
+}
+
+
+.arcana-access-button {
+    width: 100%;
+
+    padding: 13px 18px;
+
+    border: 1px solid
+        rgba(218, 185, 120, 0.5);
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8d6834,
+            #c49b59
+        );
+
+    color: #fff8e9;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.arcana-access-button:hover {
+    box-shadow:
+        0 6px 25px
+        rgba(196, 155, 89, 0.25);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.arcana-access-button:disabled {
+    opacity: 0.6;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+
+.arcana-access-error {
+    padding: 9px 12px;
+
+    border-radius: 7px;
+
+    background:
+        rgba(120, 35, 35, 0.22);
+
+    border: 1px solid
+        rgba(180, 75, 75, 0.35);
+
+    color: #e6a7a7;
+
+    font-size: 13px;
+}

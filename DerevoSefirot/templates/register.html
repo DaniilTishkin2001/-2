@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Регистрация — Амадея</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #08070b;
+            --bg2: #111018;
+
+            --gold: #c9a45c;
+            --gold-light: #e5c77d;
+            --gold-dark: #80652e;
+
+            --text: #eee8dc;
+            --muted: #aaa39a;
+
+            --error: #d88888;
+        }
+
+
+        /* =====================================
+           BODY
+        ===================================== */
+
+        body {
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 50% 40%,
+                    rgba(142, 105, 39, 0.13),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 20% 80%,
+                    rgba(80, 50, 20, 0.10),
+                    transparent 30%
+                ),
+                var(--bg);
+
+            overflow: hidden;
+        }
+
+
+        /* =====================================
+           MAGIC GRID
+        ===================================== */
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 49.8%,
+                    rgba(201,164,92,.035) 50%,
+                    transparent 50.2%
+                ),
+                linear-gradient(
+                    0deg,
+                    transparent 49.8%,
+                    rgba(201,164,92,.025) 50%,
+                    transparent 50.2%
+                );
+
+            background-size: 120px 120px;
+        }
+
+
+        /* =====================================
+           PORTAL
+        ===================================== */
+
+        .portal {
+            position: relative;
+
+            width: min(
+                440px,
+                calc(100vw - 32px)
+            );
+
+            padding: 46px 42px 40px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(27,25,33,.96),
+                    rgba(10,9,14,.97)
+                );
+
+            border:
+                1px solid
+                rgba(201,164,92,.42);
+
+            box-shadow:
+                0 0 0 1px
+                    rgba(201,164,92,.05),
+
+                0 25px 80px
+                    rgba(0,0,0,.65),
+
+                0 0 70px
+                    rgba(201,164,92,.08);
+
+            border-radius: 18px;
+
+            animation:
+                portalAppear .9s ease both;
+        }
+
+
+        @keyframes portalAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(20px)
+                    scale(.97);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        /* =====================================
+           INNER BORDER
+        ===================================== */
+
+        .portal::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 10px;
+
+            border:
+                1px solid
+                rgba(201,164,92,.12);
+
+            border-radius: 12px;
+
+            pointer-events: none;
+        }
+
+
+        /* =====================================
+           SYMBOLS
+        ===================================== */
+
+        .symbol {
+            position: absolute;
+
+            color: var(--gold);
+
+            opacity: .55;
+
+            font-size: 22px;
+
+            text-shadow:
+                0 0 12px
+                rgba(201,164,92,.5);
+        }
+
+        .symbol.one {
+            top: 18px;
+            left: 22px;
+        }
+
+        .symbol.two {
+            top: 18px;
+            right: 22px;
+        }
+
+        .symbol.three {
+            bottom: 18px;
+            left: 22px;
+        }
+
+        .symbol.four {
+            bottom: 18px;
+            right: 22px;
+        }
+
+
+        /* =====================================
+           BRAND
+        ===================================== */
+
+        .brand {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .brand-name {
+            font-size: 30px;
+
+            letter-spacing: 5px;
+
+            color:
+                var(--gold-light);
+
+            text-shadow:
+                0 0 20px
+                rgba(201,164,92,.25);
+        }
+
+        .brand-subtitle {
+            margin-top: 7px;
+
+            font-size: 11px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            color:
+                var(--muted);
+        }
+
+
+        /* =====================================
+           DIVIDER
+        ===================================== */
+
+        .divider {
+            width: 100px;
+
+            height: 1px;
+
+            margin:
+                19px auto 25px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--gold),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 10px
+                rgba(201,164,92,.4);
+        }
+
+
+        /* =====================================
+           TITLE
+        ===================================== */
+
+        h1 {
+            margin: 0;
+
+            text-align: center;
+
+            font-size: 25px;
+
+            font-weight: normal;
+
+            color: #f1e9da;
+        }
+
+
+        .description {
+            margin:
+                10px 0 28px;
+
+            text-align: center;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            color:
+                var(--muted);
+        }
+
+
+        /* =====================================
+           FORM
+        ===================================== */
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+            letter-spacing: .5px;
+
+            color: #cfc6b8;
+        }
+
+
+        input {
+            width: 100%;
+
+            padding:
+                14px 16px;
+
+            border:
+                1px solid
+                rgba(201,164,92,.25);
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background:
+                rgba(5,5,9,.75);
+
+            color: white;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size: 15px;
+
+            transition:
+                border-color .25s,
+                box-shadow .25s,
+                background .25s;
+        }
+
+
+        input::placeholder {
+            color: #6f6a63;
+        }
+
+
+        input:focus {
+            border-color:
+                rgba(201,164,92,.8);
+
+            background:
+                rgba(10,9,14,.95);
+
+            box-shadow:
+                0 0 0 3px
+                    rgba(201,164,92,.07),
+
+                0 0 22px
+                    rgba(201,164,92,.10);
+        }
+
+
+        /* =====================================
+           BUTTON
+        ===================================== */
+
+        .magic-button {
+            position: relative;
+
+            width: 100%;
+
+            padding: 14px;
+
+            border:
+                1px solid
+                var(--gold-dark);
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9b7938,
+                    #c7a35c,
+                    #967333
+                );
+
+            color: #17120a;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size: 16px;
+
+            letter-spacing: .7px;
+
+            cursor: pointer;
+
+            transition:
+                transform .25s,
+                box-shadow .25s,
+                filter .25s;
+        }
+
+
+        .magic-button:hover {
+            transform:
+                translateY(-1px);
+
+            filter:
+                brightness(1.08);
+
+            box-shadow:
+                0 0 20px
+                    rgba(201,164,92,.25),
+
+                0 8px 30px
+                    rgba(0,0,0,.35);
+        }
+
+
+        .magic-button:active {
+            transform:
+                translateY(1px);
+        }
+
+
+        .magic-button:disabled {
+            opacity: .6;
+
+            cursor:
+                not-allowed;
+
+            transform: none;
+
+            box-shadow: none;
+        }
+
+
+        /* =====================================
+           ERROR / MESSAGE
+        ===================================== */
+
+        .message {
+            min-height: 20px;
+
+            margin-top: 15px;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            color:
+                var(--error);
+        }
+
+
+        /* =====================================
+           LOGIN LINK
+        ===================================== */
+
+        .login {
+            margin-top: 25px;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            color:
+                var(--muted);
+        }
+
+
+        .login a {
+            color:
+                var(--gold-light);
+
+            text-decoration: none;
+
+            border-bottom:
+                1px solid
+                rgba(201,164,92,.35);
+
+            transition:
+                color .2s,
+                border-color .2s;
+        }
+
+
+        .login a:hover {
+            color:
+                var(--gold-light);
+
+            border-color:
+                var(--gold);
+        }
+
+
+        /* =====================================
+           FOOTER
+        ===================================== */
+
+        .footer {
+            margin-top: 28px;
+
+            text-align: center;
+
+            font-size: 10px;
+
+            letter-spacing: 2px;
+
+            color: #59554e;
+        }
+
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media (max-width: 480px) {
+
+            .portal {
+                padding:
+                    38px 25px 32px;
+            }
+
+            .brand-name {
+                font-size: 25px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<div class="portal">
+
+
+    <!-- MAGIC SYMBOLS -->
+
+    <div class="symbol one">☉</div>
+    <div class="symbol two">☽</div>
+    <div class="symbol three">✦</div>
+    <div class="symbol four">✧</div>
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-name">
+            АМАДЕЯ
+        </div>
+
+        <div class="brand-subtitle">
+            центр саморазвития
+        </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <!-- TITLE -->
+
+    <h1>
+        Открыть своё пространство
+    </h1>
+
+
+    <div class="description">
+
+        Создайте аккаунт,
+        чтобы начать свой путь
+        к Древу Сефирот
+        и мудрости Арканов.
+
+    </div>
+
+
+    <!-- REGISTER FORM -->
+
+    <form id="registerForm">
+
+
+        <!-- EMAIL -->
+
+        <div class="field">
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Введите ваш email"
+                autocomplete="email"
+                required
+            >
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="field">
+
+            <label for="password">
+                Пароль
+            </label>
+
+            <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Минимум 8 символов"
+                autocomplete="new-password"
+                minlength="8"
+                required
+            >
+
+        </div>
+
+
+        <!-- PASSWORD CONFIRM -->
+
+        <div class="field">
+
+            <label for="passwordConfirm">
+                Повторите пароль
+            </label>
+
+            <input
+                id="passwordConfirm"
+                name="passwordConfirm"
+                type="password"
+                placeholder="Повторите ваш пароль"
+                autocomplete="new-password"
+                minlength="8"
+                required
+            >
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div
+            class="message"
+            id="registerError">
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <button
+            class="magic-button"
+            type="submit">
+
+            ✦ &nbsp; СОЗДАТЬ АККАУНТ
+
+        </button>
+
+
+    </form>
+
+
+    <!-- LOGIN -->
+
+    <div class="login">
+
+        Уже есть аккаунт?
+
+        <a href="/login">
+            Войти в пространство
+        </a>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        TAROT • SEPHIROTH • SELF KNOWLEDGE
+
+    </div>
+
+
+</div>
+
+
+<!-- REGISTER JS -->
+
+<script src="/static/js/register.js"></script>
+
+
+</body>
+</html>
