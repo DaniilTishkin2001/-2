@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Закрытое видео — Amadeya</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            background: #050609;
+            color: #eee7d7;
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px;
+        }
+
+        .video-page {
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .title {
+            margin-bottom: 20px;
+
+            color: #d8b56a;
+
+            font-size: 28px;
+            font-weight: 600;
+
+            text-align: center;
+        }
+
+        .video-container {
+            position: relative;
+
+            width: 100%;
+
+            aspect-ratio: 16 / 9;
+
+            background: #000;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 0 50px rgba(216, 181, 106, 0.08);
+        }
+
+        #player {
+            width: 100%;
+            height: 100%;
+
+            border: 0;
+
+            display: none;
+        }
+
+        .loading {
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            color: rgba(238, 231, 215, .6);
+
+            font-size: 16px;
+        }
+
+        .error {
+            position: absolute;
+
+            inset: 0;
+
+            display: none;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #ff8b6b;
+        }
+
+        .back {
+            display: block;
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            color: #d8b56a;
+
+            text-decoration: none;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="video-page">
+
+    <div class="title">
+        Закрытое видео
+    </div>
+
+
+    <div class="video-container">
+
+        <div
+            id="loading"
+            class="loading"
+        >
+            Загрузка видео…
+        </div>
+
+
+        <div
+            id="error"
+            class="error"
+        >
+            Не удалось загрузить видео.
+        </div>
+
+
+        <iframe
+            id="player"
+            allow="clipboard-write; autoplay"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+
+    </div>
+
+
+    <a
+        class="back"
+        href="/"
+    >
+        ← Вернуться к Древу Сефирот
+    </a>
+
+</div>
+
+
+<script>
+"use strict";
+
+(async function () {
+
+    const player = document.getElementById("player");
+    const loading = document.getElementById("loading");
+    const error = document.getElementById("error");
+
+    try {
+
+        const response = await fetch(
+            "/api/video/embed",
+            {
+                method: "GET",
+
+                credentials: "same-origin",
+
+                cache: "no-store",
+
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+
+        if (!response.ok) {
+
+            if (response.status === 401) {
+                window.location.href = "/login";
+                return;
+            }
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+        }
+
+
+        const data = await response.json();
+
+
+        if (
+            !data.success ||
+            !data.url
+        ) {
+            throw new Error(
+                "Некорректный ответ сервера"
+            );
+        }
+
+
+        /*
+         * URL появляется только после проверки
+         * серверной session.
+         */
+
+        player.src = data.url;
+
+        player.style.display = "block";
+
+        loading.style.display = "none";
+
+
+    } catch (e) {
+
+        console.error(e);
+
+        loading.style.display = "none";
+
+        error.style.display = "flex";
+    }
+
+})();
+</script>
+
+
+<script>
+/*
+ * Небольшая защита от совсем обычного
+ * пользователя.
+ *
+ * Это НЕ является настоящей криптографической
+ * защитой и не защищает от DevTools.
+ */
+
+document.addEventListener(
+    "contextmenu",
+    function (event) {
+        event.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        /*
+         * F12
+         */
+
+        if (event.key === "F12") {
+            event.preventDefault();
+            return;
+        }
+
+
+        /*
+         * Ctrl + Shift + I
+         */
+
+        if (
+            event.ctrlKey &&
+            event.shiftKey &&
+            event.key.toLowerCase() === "i"
+        ) {
+            event.preventDefault();
+            return;
+        }
+
+
+        /*
+         * Ctrl + Shift + J
+         */
+
+        if (
+            event.ctrlKey &&
+            event.shiftKey &&
+            event.key.toLowerCase() === "j"
+        ) {
+            event.preventDefault();
+            return;
+        }
+
+
+        /*
+         * Ctrl + U
+         */
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "u"
+        ) {
+            event.preventDefault();
+            return;
+        }
+
+    }
+);
+</script>
+
+</body>
+</html>

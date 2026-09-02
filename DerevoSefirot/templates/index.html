@@ -1,0 +1,4548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/static/css/style.css">
+
+  <title>Древо Сефирот — Amadeya</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #050609;
+
+      --gold: #d8b56a;
+      --gold-light: #fff0bb;
+      --gold-mid: #e8c979;
+      --gold-dark: #72511f;
+
+      --fire: #ff7138;
+      --fire-light: #ffc06b;
+      --fire-glow: rgba(255, 91, 42, .75);
+
+      --water: #368eea;
+      --water-light: #7dc8ff;
+      --water-glow: rgba(43, 139, 255, .7);
+
+      --air: #9ce8ff;
+      --air-light: #e7fbff;
+      --air-glow: rgba(133, 225, 255, .7);
+      --earth: #8aa65b;
+--earth-light: #c9dd91;
+--earth-glow: rgba(138, 166, 91, .55);
+
+
+      --text: #eee7d7;
+      --muted: rgba(238, 231, 215, .43);
+      
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+
+      color: var(--text);
+
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 42%,
+          rgba(255, 126, 48, .055),
+          transparent 22%
+        ),
+        radial-gradient(
+          ellipse at 28% 50%,
+          rgba(32, 118, 225, .075),
+          transparent 28%
+        ),
+        radial-gradient(
+          ellipse at 72% 50%,
+          rgba(117, 219, 245, .065),
+          transparent 28%
+        ),
+        #050609;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      opacity: .13;
+
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(255,255,255,.6) 0 1px,
+          transparent 1px
+        );
+
+      background-size: 190px 190px;
+    }
+
+    /* =========================================
+       PAGE
+    ========================================= */
+
+    .page {
+      position: relative;
+
+      min-height: 100vh;
+
+      padding:
+        45px
+        clamp(15px, 4vw, 70px)
+        80px;
+    }
+
+    /* =========================================
+       AMBIENT
+    ========================================= */
+
+    .ambient {
+      position: fixed;
+
+      width: 500px;
+      height: 500px;
+
+      border-radius: 50%;
+
+      pointer-events: none;
+
+      filter: blur(140px);
+
+      opacity: .12;
+    }
+
+    .ambient.water {
+      left: -260px;
+      top: 30%;
+
+      background: var(--water);
+    }
+
+    .ambient.air {
+      right: -260px;
+      top: 25%;
+
+      background: var(--air);
+    }
+
+    .ambient.fire {
+      left: 50%;
+      top: 25%;
+
+      transform: translateX(-50%);
+
+      background: var(--fire);
+
+      opacity: .06;
+    }
+
+    /* =========================================
+       HEADER
+    ========================================= */
+
+    .header {
+      position: relative;
+
+      z-index: 5;
+
+      text-align: center;
+
+      margin-bottom: 15px;
+    }
+
+    .eyebrow {
+      margin-bottom: 12px;
+
+      color: var(--gold);
+
+      font-size: 9px;
+
+      letter-spacing: .42em;
+
+      text-transform: uppercase;
+    }
+
+    .header h1 {
+      color: #f5ead0;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(40px, 5vw, 67px);
+
+      font-weight: 400;
+
+      letter-spacing: .045em;
+
+      text-shadow:
+        0 0 35px rgba(255, 208, 116, .08);
+    }
+
+    .header p {
+      margin-top: 12px;
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      letter-spacing: .09em;
+    }
+
+    /* =========================================
+       LAYOUT
+    ========================================= */
+
+    .layout {
+      position: relative;
+
+      z-index: 2;
+
+      width: min(1500px, 100%);
+
+      margin: 0 auto;
+
+      display: grid;
+
+      grid-template-columns:
+        1fr
+        minmax(650px, 760px)
+        1fr;
+
+      align-items: center;
+
+      gap: 20px;
+    }
+
+    /* =========================================
+       TREE AREA
+    ========================================= */
+
+    .tree-container {
+      position: relative;
+
+      grid-column: 2;
+
+      width: 100%;
+
+      height: 790px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+    }
+
+    .tree-aura {
+      position: absolute;
+
+      width: 74%;
+      height: 82%;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          ellipse,
+          rgba(255, 169, 73, .10),
+          rgba(75, 147, 232, .035) 32%,
+          transparent 70%
+        );
+
+      filter: blur(35px);
+
+      animation:
+        auraPulse 7s ease-in-out infinite;
+    }
+
+    .tree {
+      position: relative;
+
+      width: 720px;
+      height: 740px;
+
+      flex: 0 0 720px;
+    }
+
+    /* =========================================
+       ELEMENT LABELS
+    ========================================= */
+
+    .element-label {
+      position: absolute;
+
+      z-index: 1;
+
+      font-family: Georgia, serif;
+
+      font-size: 9px;
+
+      letter-spacing: .3em;
+
+      text-transform: uppercase;
+
+      opacity: .65;
+
+      pointer-events: none;
+    }
+
+    .element-label.water {
+      left: 3%;
+      top: 47%;
+
+      color: var(--water-light);
+
+      writing-mode: vertical-rl;
+
+      transform: rotate(180deg);
+
+      text-shadow:
+        0 0 15px var(--water-glow);
+    }
+
+    .element-label.fire {
+      left: 50%;
+      top: 1%;
+
+      transform: translateX(-50%);
+
+      color: var(--fire-light);
+
+      text-shadow:
+        0 0 18px var(--fire-glow);
+    }
+
+    .element-label.air {
+      right: 3%;
+      top: 47%;
+
+      color: var(--air-light);
+
+      writing-mode: vertical-rl;
+
+      text-shadow:
+        0 0 15px var(--air-glow);
+    }
+
+    /* =========================================
+       CENTRAL FIRE PILLAR
+    ========================================= */
+
+    .fire-pillar {
+      position: absolute;
+
+      left: 50%;
+
+      top: 4%;
+
+      width: 8px;
+
+      height: 92%;
+
+      transform:
+        translateX(-50%);
+
+      border-radius: 999px;
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          rgba(255, 105, 45, .28),
+          rgba(255, 194, 103, .95),
+          rgba(255, 91, 37, .55),
+          rgba(255, 194, 103, .95),
+          rgba(255, 105, 45, .25),
+          transparent
+        );
+
+      box-shadow:
+        0 0 5px #ff8a43,
+        0 0 15px rgba(255, 91, 37, .8),
+        0 0 38px rgba(255, 83, 35, .55),
+        0 0 70px rgba(255, 83, 35, .2);
+
+      opacity: .85;
+
+      overflow: hidden;
+    }
+
+    .fire-pillar::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0 12px,
+          rgba(255,240,190,.95) 12px 18px,
+          transparent 18px 34px
+        );
+
+      animation:
+        fireFlow 2.3s linear infinite;
+    }
+
+    .fire-pillar::after {
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+
+      top: 0;
+
+      width: 28px;
+      height: 100%;
+
+      transform: translateX(-50%);
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          rgba(255, 110, 45, .25),
+          transparent
+        );
+
+      filter: blur(10px);
+    }
+
+    /* =========================================
+       SIDE ELEMENT CHANNELS
+    ========================================= */
+
+    .element-channel {
+      position: absolute;
+
+      top: 8%;
+
+      bottom: 7%;
+
+      width: 2px;
+
+      border-radius: 20px;
+
+      opacity: .55;
+    }
+
+    .element-channel.water {
+      left: 12%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          var(--water),
+          var(--water-light),
+          var(--water),
+          transparent
+        );
+
+      box-shadow:
+        0 0 10px var(--water),
+        0 0 30px var(--water-glow);
+    }
+
+    .element-channel.air {
+      right: 12%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          var(--air),
+          var(--air-light),
+          var(--air),
+          transparent
+        );
+
+      box-shadow:
+        0 0 10px var(--air),
+        0 0 30px var(--air-glow);
+    }
+
+    /* =========================================
+       PATH SYSTEM
+       
+       Теперь каждый путь состоит из:
+       - внешней оболочки
+       - тёмной глубины
+       - светящегося сердечника
+       - движущегося блика
+    ========================================= */
+
+    .path {
+      position: absolute;
+
+      height: 9px;
+
+      transform-origin: left center;
+
+      cursor: pointer;
+
+      z-index: 2;
+
+      opacity: .88;
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255,255,255,.28),
+          var(--path-color) 25%,
+          rgba(20,18,17,.95) 48%,
+          var(--path-color) 72%,
+          rgba(255,255,255,.12)
+        );
+
+      box-shadow:
+        0 2px 5px rgba(0,0,0,.8),
+        0 0 5px var(--path-color),
+        0 0 13px var(--path-glow);
+
+      transition:
+        opacity .3s ease,
+        filter .3s ease,
+        transform .3s ease;
+    }
+
+    .path::before {
+      content: "";
+
+      position: absolute;
+
+      left: 3%;
+      right: 3%;
+
+      top: 50%;
+
+      height: 2px;
+
+      transform: translateY(-50%);
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--path-light) 20%,
+          #fff 50%,
+          var(--path-light) 80%,
+          transparent
+        );
+
+      box-shadow:
+        0 0 8px var(--path-light),
+        0 0 15px var(--path-color);
+    }
+
+    .path::after {
+      content: "";
+
+      position: absolute;
+
+      top: 50%;
+
+      left: -20px;
+
+      width: 70px;
+      height: 3px;
+
+      transform:
+        translateY(-50%);
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #fff,
+          var(--path-light),
+          transparent
+        );
+
+      box-shadow:
+        0 0 10px #fff,
+        0 0 22px var(--path-color);
+
+      opacity: 0;
+
+      animation:
+        energyTravel 1.8s linear infinite;
+    }
+
+    .path:hover {
+      opacity: 1;
+
+      filter:
+        brightness(1.3)
+        saturate(1.2);
+    }
+
+    .path:hover::after {
+      opacity: 1;
+    }
+
+    .path.active {
+      height: 11px;
+
+      opacity: 1;
+
+      filter:
+        brightness(1.35)
+        saturate(1.25);
+
+      box-shadow:
+        0 2px 7px rgba(0,0,0,.8),
+        0 0 8px var(--path-color),
+        0 0 20px var(--path-color),
+        0 0 45px var(--path-glow);
+    }
+
+    .path.active::after {
+      opacity: 1;
+
+      animation-duration: .85s;
+    }
+
+    /* =========================================
+       PATH COLORS
+    ========================================= */
+
+    .path-water {
+      --path-color: var(--water);
+      --path-light: var(--water-light);
+      --path-glow: var(--water-glow);
+    }
+
+    .path-fire {
+      --path-color: var(--fire);
+      --path-light: var(--fire-light);
+      --path-glow: var(--fire-glow);
+    }
+
+    .path-air {
+      --path-color: var(--air);
+      --path-light: var(--air-light);
+      --path-glow: var(--air-glow);
+    }
+    .path-earth {
+  --path-color: var(--earth);
+  --path-light: var(--earth-light);
+  --path-glow: var(--earth-glow);
+}
+
+
+    /* =========================================
+   PATH POSITIONS
+   По схеме с картинки:
+
+   1  Кетер → Хокма
+   2  Кетер → Бина
+   3  Кетер → Тиферет
+   4  Хокма ↔ Бина
+   5  Хокма → Тиферет
+   6  Хокма → Хесед
+   7  Бина → Тиферет
+   8  Бина → Гебура
+   9  Хесед ↔ Гебура
+   10 Хесед → Тиферет
+   11 Хесед → Нецах
+   12 Гебура → Тиферет
+   13 Гебура → Ход
+   14 Тиферет → Нецах
+   15 Тиферет → Есод
+   16 Тиферет → Ход
+   17 Ход → Нецах
+   18 Нецах → Есод
+   19 Нецах → Малькут
+   20 Ход → Есод
+   21 Ход → Малькут
+   22 Есод → Малькут
+========================================= */
+
+/* Верхний треугольник */
+
+.p1 {
+  width: 27%;
+  left: 50%;
+  top: 8%;
+  transform: rotate(29deg);
+}
+
+.p2 {
+  width: 27%;
+  left: 50%;
+  top: 8%;
+  transform: rotate(151deg);
+}
+
+.p3 {
+  width: 42%;
+  left: 50%;
+  top: 8%;
+  transform: rotate(90deg);
+}
+
+.p4 {
+  width: 50%;
+  left: 25%;
+  top: 23%;
+  transform: rotate(0deg);
+}
+
+
+/* Хокма → Тиферет */
+
+.p5 {
+  width: 38%;
+  left: 25%;
+  top: 23%;
+  transform: rotate(48deg);
+}
+
+
+/* Хокма → Хесед */
+
+.p6 {
+  width: 27%;
+  left: 75%;
+  top: 23%;
+  transform: rotate(90deg);
+}
+
+
+/* Бина → Тиферет */
+
+.p7 {
+  width: 38%;
+  left: 75%;
+  top: 23%;
+  transform: rotate(132deg);
+}
+
+
+/* Бина → Гебура */
+
+.p8 {
+  width: 27%;
+  left: 25%;
+  top: 23%;
+  transform: rotate(90deg);
+}
+
+
+/* Хесед ↔ Гебура */
+
+.p9 {
+  width: 50%;
+  left: 25%;
+  top: 42%;
+  transform: rotate(0deg);
+}
+
+
+/* Хесед → Тиферет */
+
+.p10 {
+  width: 29%;
+  left: 75%;
+  top: 42%;
+  transform: rotate(161deg);
+}
+
+
+/* Хесед → Нецах */
+
+.p11 {
+  width: 27%;
+  left: 75%;
+  top: 42%;
+  transform: rotate(90deg);
+}
+
+
+/* Гебура → Тиферет */
+
+.p12 {
+  width: 29%;
+  left: 25%;
+  top: 42%;
+  transform: rotate(19deg);
+}
+
+
+/* Гебура → Ход */
+
+.p13 {
+  width: 27%;
+  left: 25%;
+  top: 42%;
+  transform: rotate(90deg);
+}
+
+
+/* Тиферет → Нецах */
+
+.p14 {
+  width: 29%;
+  left: 50%;
+  top: 50%;
+  transform: rotate(27deg);
+}
+
+
+/* Тиферет → Есод */
+
+.p15 {
+  width: 28%;
+  left: 50%;
+  top: 50%;
+  transform: rotate(90deg);
+}
+
+
+/* Тиферет → Ход */
+
+.p16 {
+  width: 29%;
+  left: 50%;
+  top: 50%;
+  transform: rotate(153deg);
+}
+
+
+/* Ход ↔ Нецах */
+
+.p17 {
+  width: 50%;
+  left: 25%;
+  top: 65%;
+  transform: rotate(0deg);
+}
+
+
+/* Нецах → Есод */
+
+.p18 {
+  width: 29%;
+  left: 75%;
+  top: 65%;
+  transform: rotate(153deg);
+}
+
+
+/* Нецах → Малькут */
+
+/* =====================================
+   19 — СОЛНЦЕ
+   Нецах → Малькут
+===================================== */
+
+.p19 {
+  width: 39%;
+  left: 25%;
+  top: 65%;
+  transform: rotate(48deg);
+}
+
+
+/* =====================================
+   21 — МИР
+   Ход → Малькут
+===================================== */
+
+.p21 {
+  width: 39%;
+  left: 75%;
+  top: 65%;
+  transform: rotate(132deg);
+}
+
+
+/* Ход → Есод */
+
+.p20 {
+  width: 29%;
+  left: 25%;
+  top: 65%;
+  transform: rotate(27deg);
+}
+
+
+/* Ход → Малькут */
+
+
+
+
+/* Есод → Малькут */
+
+.p22 {
+  width: 24%;
+  left: 50%;
+  top: 78%;
+  transform: rotate(90deg);
+}
+
+    /* =========================================
+       SEPHIROT
+       
+       ОДИН ЦВЕТ ДЛЯ ВСЕХ.
+       Различается только интенсивность свечения.
+    ========================================= */
+
+    .sephira {
+      position: absolute;
+
+      width: 82px;
+      height: 82px;
+
+      transform:
+        translate(-50%, -50%);
+
+      border-radius: 50%;
+
+      z-index: 5;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+    }
+
+    .sephira::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      border-radius: 50%;
+
+      border:
+        1px solid
+        rgba(255, 221, 143, .78);
+
+      background:
+        radial-gradient(
+          circle at 35% 25%,
+          #fff9df 0%,
+          #f5dda0 8%,
+          #c79b4b 27%,
+          #513817 48%,
+          #17120b 69%,
+          #050609 80%
+        );
+
+      box-shadow:
+        inset
+        0 0 12px rgba(255, 240, 185, .45),
+
+        inset
+        -8px -10px 18px rgba(0,0,0,.8),
+
+        0 0 8px rgba(242,205,119,.8),
+
+        0 0 22px rgba(219,171,80,.42),
+
+        0 0 45px rgba(211,164,78,.18);
+
+      transition:
+        transform .4s ease,
+        box-shadow .4s ease;
+    }
+
+    .sephira::after {
+      content: "";
+
+      position: absolute;
+
+      inset: -10px;
+
+      border-radius: 50%;
+
+      border:
+        1px solid
+        rgba(238, 203, 126, .25);
+
+      box-shadow:
+        0 0 16px rgba(218,168,76,.16);
+
+      animation:
+        nodePulse 5s ease-in-out infinite;
+    }
+
+    .sephira:hover::before {
+      transform: scale(1.1);
+
+      box-shadow:
+        inset
+        0 0 18px rgba(255,240,185,.65),
+
+        inset
+        -8px -10px 18px rgba(0,0,0,.75),
+
+        0 0 15px rgba(255,221,143,.9),
+
+        0 0 35px rgba(219,171,80,.7),
+
+        0 0 65px rgba(211,164,78,.35);
+    }
+
+    .sephira-name {
+      position: absolute;
+
+      top: 93px;
+
+      width: 150px;
+
+      text-align: center;
+
+      color: #e8ce91;
+
+      font-family: Georgia, serif;
+
+      font-size: 13px;
+
+      text-shadow:
+        0 0 12px rgba(220,174,85,.35);
+
+      pointer-events: none;
+    }
+
+    .sephira-hebrew {
+      position: absolute;
+
+      bottom: 92px;
+
+      width: 150px;
+
+      text-align: center;
+
+      color: rgba(240,213,157,.36);
+
+      font-size: 13px;
+
+      pointer-events: none;
+    }
+
+    /* =========================================
+   SEPHIROT POSITIONS
+   ========================================= */
+
+.s-keter {
+  left: 50%;
+  top: 8%;
+}
+
+/* Хокма — СПРАВА */
+.s-chokmah {
+  left: 75%;
+  top: 23%;
+}
+
+/* Бина — СЛЕВА */
+.s-binah {
+  left: 25%;
+  top: 23%;
+}
+
+/* Хесед — СПРАВА */
+.s-chesed {
+  left: 75%;
+  top: 42%;
+}
+
+/* Гебура — СЛЕВА */
+.s-gevurah {
+  left: 25%;
+  top: 42%;
+}
+
+.s-tiferet {
+  left: 50%;
+  top: 50%;
+}
+
+/* Нецах — СПРАВА */
+.s-netzach {
+  left: 75%;
+  top: 65%;
+}
+
+/* Ход — СЛЕВА */
+.s-hod {
+  left: 25%;
+  top: 65%;
+}
+
+.s-yesod {
+  left: 50%;
+  top: 78%;
+}
+
+.s-malkuth {
+  left: 50%;
+  top: 94%;
+}
+
+
+    /* =========================================
+       CENTRAL SEPHIROT
+    ========================================= */
+
+    .s-keter::before,
+    .s-tiferet::before,
+    .s-malkuth::before {
+      background:
+        radial-gradient(
+          circle at 35% 25%,
+          #fffdf0 0%,
+          #fff0b2 9%,
+          #d5aa59 28%,
+          #543a18 50%,
+          #151008 72%,
+          #050609 82%
+        );
+
+      box-shadow:
+        inset 0 0 20px rgba(255,245,199,.65),
+        inset -10px -12px 20px rgba(0,0,0,.8),
+        0 0 15px rgba(255,221,143,.95),
+        0 0 40px rgba(219,171,80,.6),
+        0 0 70px rgba(255,119,50,.15);
+    }
+
+    /* =========================================
+       SIDE PANEL
+    ========================================= */
+
+    .panel {
+      position: relative;
+
+      grid-column: 3;
+
+      width: 390px;
+
+      min-height: 650px;
+
+      padding: 42px 32px;
+
+      border:
+        1px solid
+        rgba(207,161,78,.18);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(29,25,19,.93),
+          rgba(7,10,14,.96)
+        );
+
+      backdrop-filter: blur(20px);
+
+      box-shadow:
+        0 30px 100px rgba(0,0,0,.6),
+        inset 0 0 60px rgba(214,168,90,.025);
+
+      overflow: hidden;
+
+      align-self: center;
+    }
+
+    .panel::before {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      top: 0;
+
+      width: 40px;
+      height: 40px;
+
+      border-left:
+        1px solid
+        rgba(215,169,83,.55);
+
+      border-top:
+        1px solid
+        rgba(215,169,83,.55);
+    }
+
+    .panel::after {
+      content: "";
+
+      position: absolute;
+
+      right: 0;
+      bottom: 0;
+
+      width: 40px;
+      height: 40px;
+
+      border-right:
+        1px solid
+        rgba(215,169,83,.55);
+
+      border-bottom:
+        1px solid
+        rgba(215,169,83,.55);
+    }
+
+    .empty-panel {
+      min-height: 560px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+    }
+
+    .empty-symbol {
+      margin-bottom: 25px;
+
+      color: rgba(215,169,83,.45);
+
+      font-family: Georgia, serif;
+
+      font-size: 48px;
+
+      animation:
+        symbolFloat 5s ease-in-out infinite;
+    }
+
+    .empty-panel h2 {
+      margin-bottom: 12px;
+
+      color: rgba(242,229,202,.75);
+
+      font-family: Georgia, serif;
+
+      font-size: 28px;
+
+      font-weight: 400;
+    }
+
+    .empty-panel p {
+      max-width: 270px;
+
+      color: rgba(239,228,208,.34);
+
+      line-height: 1.8;
+
+      font-size: 12px;
+    }
+
+    .arcana-content {
+      display: none;
+
+      --arcana-color: var(--gold);
+      --arcana-light: var(--gold-light);
+      --arcana-glow: rgba(215,174,91,.4);
+    }
+
+    .panel.has-arcana .empty-panel {
+      display: none;
+    }
+
+    .panel.has-arcana .arcana-content {
+      display: block;
+
+      animation:
+        panelAppear .6s ease both;
+    }
+
+    .close {
+      position: absolute;
+
+      top: 15px;
+      right: 17px;
+
+      width: 35px;
+      height: 35px;
+
+      border: 0;
+
+      background: transparent;
+
+      color: rgba(255,255,255,.35);
+
+      font-size: 25px;
+
+      cursor: pointer;
+    }
+
+    .arcana-number {
+      color: var(--arcana-color);
+
+      font-family: Georgia, serif;
+
+      font-size: 13px;
+
+      letter-spacing: .25em;
+    }
+
+    .arcana-symbol {
+      position: relative;
+
+      width: 125px;
+      height: 125px;
+
+      margin: 22px auto 28px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring {
+      position: absolute;
+
+      border-radius: 50%;
+
+      border:
+        1px solid
+        var(--arcana-color);
+
+      box-shadow:
+        0 0 12px var(--arcana-glow);
+    }
+
+    .ring.one {
+      width: 120px;
+      height: 120px;
+
+      animation:
+        rotate 20s linear infinite;
+    }
+
+    .ring.two {
+      width: 88px;
+      height: 88px;
+
+      border-style: dashed;
+
+      animation:
+        rotateReverse 14s linear infinite;
+    }
+
+    .symbol-center {
+      width: 48px;
+      height: 48px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      color: var(--arcana-light);
+
+      font-family: Georgia, serif;
+
+      font-size: 27px;
+
+      background:
+        radial-gradient(
+          circle,
+          var(--arcana-color),
+          rgba(30,20,10,.2)
+        );
+
+      box-shadow:
+        0 0 20px var(--arcana-glow),
+        0 0 45px var(--arcana-glow);
+    }
+
+    .arcana-label {
+      color: var(--arcana-color);
+
+      text-align: center;
+
+      font-size: 9px;
+
+      letter-spacing: .3em;
+    }
+
+    .arcana-title {
+      margin-top: 10px;
+
+      color: var(--arcana-light);
+
+      text-align: center;
+
+      font-family: Georgia, serif;
+
+      font-size: 37px;
+
+      font-weight: 400;
+
+      text-shadow:
+        0 0 20px var(--arcana-glow);
+    }
+
+    .arcana-description {
+      max-width: 290px;
+
+      margin: 15px auto 25px;
+
+      color: rgba(239,229,209,.45);
+
+      text-align: center;
+
+      line-height: 1.75;
+
+      font-size: 12px;
+    }
+
+    .activate {
+      width: 100%;
+      height: 54px;
+
+      border:
+        1px solid
+        var(--arcana-color);
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.025),
+          var(--arcana-glow),
+          rgba(255,255,255,.025)
+        );
+
+      color: var(--arcana-light);
+
+      font-size: 10px;
+
+      letter-spacing: .2em;
+
+      cursor: pointer;
+
+      transition: .35s ease;
+    }
+
+    .activate:hover {
+      box-shadow:
+        0 0 30px var(--arcana-glow);
+    }
+
+    .activate.activating {
+      box-shadow:
+        0 0 25px var(--arcana-color),
+        0 0 55px var(--arcana-glow);
+    }
+
+    /* =========================================
+       LESSONS
+    ========================================= */
+
+    .lessons {
+      margin-top: 28px;
+
+      border-top:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    .lesson {
+      min-height: 65px;
+
+      display: grid;
+
+      grid-template-columns:
+        35px
+        1fr
+        25px;
+
+      align-items: center;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+    }
+
+    .lesson-number {
+      color: var(--arcana-color);
+
+      font-size: 10px;
+    }
+
+    .lesson-title {
+      color: rgba(241,231,211,.8);
+
+      font-size: 12px;
+    }
+
+    .lesson-type {
+      display: block;
+
+      margin-top: 4px;
+
+      color: rgba(239,229,209,.3);
+
+      font-size: 9px;
+    }
+
+    .lesson-play {
+      color: var(--arcana-color);
+
+      font-size: 11px;
+    }
+
+    /* =========================================
+       TOOLTIP
+    ========================================= */
+
+    .path-info {
+      position: fixed;
+
+      z-index: 100;
+
+      padding: 9px 14px;
+
+      border:
+        1px solid
+        rgba(215,169,83,.25);
+
+      border-radius: 4px;
+
+      background:
+        rgba(7,9,12,.96);
+
+      color: #ecd494;
+
+      font-family: Georgia, serif;
+
+      font-size: 12px;
+
+      pointer-events: none;
+
+      opacity: 0;
+
+      transform: translateY(5px);
+
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.5);
+
+      transition:
+        opacity .2s ease,
+        transform .2s ease;
+    }
+
+    .path-info.show {
+      opacity: 1;
+
+      transform:
+        translateY(0);
+    }
+
+    /* =========================================
+       TREE HINT
+    ========================================= */
+
+    .tree-hint {
+      position: absolute;
+
+      left: 50%;
+      bottom: -8px;
+
+      transform:
+        translateX(-50%);
+
+      color:
+        rgba(238,220,174,.27);
+
+      font-family: Georgia, serif;
+
+      font-size: 9px;
+
+      letter-spacing: .12em;
+
+      white-space: nowrap;
+    }
+
+    /* =========================================
+       ACTIVATION
+    ========================================= */
+
+    .activation {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 999;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(255,112,43,.12),
+          rgba(0,0,0,.97) 55%
+        );
+
+      opacity: 0;
+
+      visibility: hidden;
+
+      transition:
+        opacity .5s ease,
+        visibility .5s ease;
+    }
+
+    .activation.show {
+      opacity: 1;
+
+      visibility: visible;
+    }
+
+    .activation-inner {
+      text-align: center;
+    }
+
+    .activation-symbol {
+      position: relative;
+
+      width: 180px;
+      height: 180px;
+
+      margin: auto;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .activation-symbol::before,
+    .activation-symbol::after {
+      content: "";
+
+      position: absolute;
+
+      border-radius: 50%;
+
+      border:
+        1px solid
+        var(--activation-color, #ecc267);
+
+      box-shadow:
+        0 0 20px
+        var(--activation-color, #ecc267);
+    }
+
+    .activation-symbol::before {
+      width: 180px;
+      height: 180px;
+
+      animation:
+        activationRotate 12s linear infinite;
+    }
+
+    .activation-symbol::after {
+      width: 120px;
+      height: 120px;
+
+      border-style: dashed;
+
+      animation:
+        activationRotateReverse 8s linear infinite;
+    }
+
+    .activation-star {
+      color:
+        var(--activation-light, #ffe4a0);
+
+      font-family: Georgia, serif;
+
+      font-size: 62px;
+
+      text-shadow:
+        0 0 20px
+        var(--activation-color, #ffdc8c),
+
+        0 0 60px
+        var(--activation-color, #d6a85a);
+
+      animation:
+        starPulse 1.4s ease-in-out infinite;
+    }
+
+    .activation-title {
+      margin-top: 35px;
+
+      color: #f3dfad;
+
+      font-family: Georgia, serif;
+
+      font-size: 30px;
+
+      font-weight: 400;
+
+      letter-spacing: .08em;
+    }
+
+    .activation-subtitle {
+      margin-top: 12px;
+
+      color: rgba(238,225,200,.4);
+
+      font-size: 10px;
+
+      letter-spacing: .3em;
+
+      text-transform: uppercase;
+    }
+
+    .activation-progress {
+      width: 230px;
+      height: 2px;
+
+      margin: 30px auto 0;
+
+      background:
+        rgba(255,255,255,.08);
+
+      overflow: hidden;
+    }
+
+    .activation-progress::after {
+      content: "";
+
+      display: block;
+
+      width: 0;
+      height: 100%;
+
+      background:
+        var(--activation-light, #e4bd6f);
+
+      box-shadow:
+        0 0 15px
+        var(--activation-color, #d6a85a);
+
+      animation:
+        progress 1.7s ease forwards;
+    }
+
+    /* =========================================
+       RESPONSIVE
+    ========================================= */
+
+    @media (max-width: 1250px) {
+
+      .layout {
+        display: flex;
+
+        flex-direction: column;
+      }
+
+      .tree-container {
+        width: 100%;
+      }
+
+      .panel {
+        width: min(390px, 100%);
+      }
+    }
+
+    @media (max-width: 800px) {
+
+      .page {
+        padding:
+          35px
+          10px
+          60px;
+      }
+
+      .tree-container {
+        height: 590px;
+      }
+
+      .tree {
+        transform:
+          scale(.76);
+
+        transform-origin:
+          center center;
+      }
+
+      .panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 550px) {
+
+      .header h1 {
+        font-size: 38px;
+      }
+
+      .header p {
+        font-size: 8px;
+      }
+
+      .tree-container {
+        height: 480px;
+      }
+
+      .tree {
+        transform:
+          scale(.61);
+      }
+
+      .element-label {
+        display: none;
+      }
+
+      .tree-hint {
+        font-size: 8px;
+      }
+
+      .sephira {
+        width: 72px;
+        height: 72px;
+      }
+
+      .sephira-name {
+        top: 82px;
+
+        font-size: 11px;
+      }
+
+      .sephira-hebrew {
+        bottom: 80px;
+
+        font-size: 11px;
+      }
+    }
+
+    /* =========================================
+       ANIMATIONS
+    ========================================= */
+
+    @keyframes auraPulse {
+
+      0%,
+      100% {
+        transform: scale(.94);
+
+        opacity: .6;
+      }
+
+      50% {
+        transform: scale(1.08);
+
+        opacity: 1;
+      }
+    }
+
+    @keyframes fireFlow {
+
+      from {
+        transform:
+          translateY(-40px);
+      }
+
+      to {
+        transform:
+          translateY(40px);
+      }
+    }
+
+    @keyframes energyTravel {
+
+      from {
+        transform:
+          translate(-60px, -50%);
+      }
+
+      to {
+        transform:
+          translate(700px, -50%);
+      }
+    }
+
+    @keyframes nodePulse {
+
+      0%,
+      100% {
+        transform: scale(.92);
+
+        opacity: .25;
+      }
+
+      50% {
+        transform: scale(1.08);
+
+        opacity: .75;
+      }
+    }
+
+    @keyframes symbolFloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @keyframes panelAppear {
+
+      from {
+        opacity: 0;
+
+        transform:
+          translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateX(0);
+      }
+    }
+
+    @keyframes rotate {
+
+      from {
+        transform:
+          rotate(0);
+      }
+
+      to {
+        transform:
+          rotate(360deg);
+      }
+    }
+
+    @keyframes rotateReverse {
+
+      from {
+        transform:
+          rotate(360deg);
+      }
+
+      to {
+        transform:
+          rotate(0);
+      }
+    }
+
+    @keyframes activationRotate {
+
+      from {
+        transform:
+          rotate(0)
+          scale(1);
+      }
+
+      50% {
+        transform:
+          rotate(180deg)
+          scale(1.08);
+      }
+
+      to {
+        transform:
+          rotate(360deg)
+          scale(1);
+      }
+    }
+
+    @keyframes activationRotateReverse {
+
+      from {
+        transform:
+          rotate(360deg);
+      }
+
+      to {
+        transform:
+          rotate(0);
+      }
+    }
+
+    @keyframes starPulse {
+
+      0%,
+      100% {
+        transform: scale(.9);
+
+        opacity: .65;
+      }
+
+      50% {
+        transform: scale(1.15);
+
+        opacity: 1;
+      }
+    }
+
+    @keyframes progress {
+
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+/* =========================================
+   ARCANA ACCESS
+========================================= */
+
+.arcana-access-modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(216,181,106,.10),
+      rgba(0,0,0,.94) 58%
+    );
+
+  backdrop-filter: blur(12px);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity .35s ease,
+    visibility .35s ease;
+}
+
+.arcana-access-modal.show {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+.arcana-access-box {
+  position: relative;
+
+  width: min(430px, 100%);
+
+  padding: 45px 42px 42px;
+
+  text-align: center;
+
+  border:
+    1px solid
+    rgba(215,169,83,.35);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(27,24,19,.98),
+      rgba(6,9,13,.99)
+    );
+
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.8),
+    inset 0 0 60px rgba(215,169,83,.035);
+
+  transform:
+    translateY(18px)
+    scale(.96);
+
+  transition:
+    transform .4s ease;
+}
+
+.arcana-access-modal.show
+.arcana-access-box {
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+.arcana-access-box::before,
+.arcana-access-box::after {
+  content: "";
+
+  position: absolute;
+
+  width: 38px;
+  height: 38px;
+}
+
+.arcana-access-box::before {
+  left: 0;
+  top: 0;
+
+  border-left:
+    1px solid
+    rgba(215,169,83,.7);
+
+  border-top:
+    1px solid
+    rgba(215,169,83,.7);
+}
+
+.arcana-access-box::after {
+  right: 0;
+  bottom: 0;
+
+  border-right:
+    1px solid
+    rgba(215,169,83,.7);
+
+  border-bottom:
+    1px solid
+    rgba(215,169,83,.7);
+}
+
+.arcana-access-close {
+  position: absolute;
+
+  top: 13px;
+  right: 15px;
+
+  width: 35px;
+  height: 35px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: rgba(255,255,255,.35);
+
+  font-size: 25px;
+
+  cursor: pointer;
+
+  transition: color .25s ease;
+}
+
+.arcana-access-close:hover {
+  color: #f0d89c;
+}
+
+.arcana-access-symbol {
+  width: 90px;
+  height: 90px;
+
+  margin: 0 auto 22px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #fff0bb;
+
+  font-family: Georgia, serif;
+
+  font-size: 34px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(218,174,85,.30),
+      rgba(20,15,8,.3) 65%,
+      transparent
+    );
+
+  border:
+    1px solid
+    rgba(225,187,103,.55);
+
+  box-shadow:
+    0 0 20px rgba(220,174,85,.35),
+    0 0 55px rgba(220,174,85,.12);
+
+  animation:
+    accessSymbolPulse 4s ease-in-out infinite;
+}
+
+.arcana-access-number {
+  color:
+    rgba(218,177,94,.75);
+
+  font-family: Georgia, serif;
+
+  font-size: 12px;
+
+  letter-spacing: .3em;
+}
+
+.arcana-access-title {
+  margin-top: 7px;
+
+  color: #f3dfad;
+
+  font-family: Georgia, serif;
+
+  font-size: 34px;
+
+  font-weight: 400;
+}
+
+.arcana-access-label {
+  margin-top: 10px;
+
+  color:
+    rgba(235,211,160,.38);
+
+  font-size: 9px;
+
+  letter-spacing: .3em;
+}
+
+.arcana-access-box p {
+  margin: 22px auto;
+
+  max-width: 280px;
+
+  color:
+    rgba(239,229,209,.42);
+
+  line-height: 1.7;
+
+  font-size: 11px;
+}
+
+#arcanaAccessPassword {
+  width: 100%;
+  height: 52px;
+
+  padding: 0 16px;
+
+  outline: none;
+
+  border:
+    1px solid
+    rgba(215,169,83,.25);
+
+  background:
+    rgba(0,0,0,.35);
+
+  color: #f5e4b8;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  letter-spacing: .12em;
+
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+#arcanaAccessPassword:focus {
+  border-color:
+    rgba(224,183,94,.7);
+
+  box-shadow:
+    0 0 20px
+    rgba(218,174,85,.12);
+}
+
+#arcanaAccessPassword::placeholder {
+  color:
+    rgba(239,229,209,.22);
+}
+
+.arcana-access-submit {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 15px;
+
+  border:
+    1px solid
+    rgba(218,174,85,.6);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(218,174,85,.03),
+      rgba(218,174,85,.15),
+      rgba(218,174,85,.03)
+    );
+
+  color: #f3d993;
+
+  font-size: 9px;
+
+  letter-spacing: .22em;
+
+  cursor: pointer;
+
+  transition:
+    .3s ease;
+}
+
+.arcana-access-submit:hover {
+  border-color:
+    rgba(238,205,132,.9);
+
+  box-shadow:
+    0 0 25px
+    rgba(218,174,85,.22);
+}
+
+.arcana-access-submit:disabled {
+  opacity: .45;
+
+  cursor: wait;
+}
+
+.arcana-access-error {
+  min-height: 18px;
+
+  margin-top: 12px;
+
+  color: #e88967;
+
+  font-size: 10px;
+}
+
+@keyframes accessSymbolPulse {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(220,174,85,.30),
+      0 0 55px rgba(220,174,85,.08);
+
+    transform: scale(.97);
+  }
+
+  50% {
+    box-shadow:
+      0 0 25px rgba(220,174,85,.55),
+      0 0 65px rgba(220,174,85,.18);
+
+    transform: scale(1.03);
+  }
+
+}
+/* =========================================
+   ARCANA VIDEO MODAL
+========================================= */
+
+.arcana-video-modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 3000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(216,181,106,.08),
+      rgba(0,0,0,.96) 65%
+    );
+
+  backdrop-filter: blur(15px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity .35s ease,
+    visibility .35s ease;
+}
+
+
+.arcana-video-modal.show {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+
+/* =========================================
+   VIDEO BOX
+========================================= */
+
+.arcana-video-box {
+  position: relative;
+
+  width: min(1100px, 96vw);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20,18,14,.98),
+      rgba(5,7,10,.99)
+    );
+
+  border:
+    1px solid
+    rgba(215,169,83,.35);
+
+  box-shadow:
+    0 30px 120px rgba(0,0,0,.9),
+    0 0 60px rgba(215,169,83,.06);
+
+  transform:
+    translateY(20px)
+    scale(.97);
+
+  transition:
+    transform .4s ease;
+}
+
+
+.arcana-video-modal.show
+.arcana-video-box {
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+/* =========================================
+   CLOSE
+========================================= */
+
+.arcana-video-close {
+  position: absolute;
+
+  top: 10px;
+  right: 12px;
+
+  z-index: 10;
+
+  width: 40px;
+  height: 40px;
+
+  border: 0;
+
+  background: rgba(0,0,0,.45);
+
+  color: rgba(255,255,255,.6);
+
+  font-size: 30px;
+
+  line-height: 40px;
+
+  cursor: pointer;
+
+  transition:
+    color .25s ease,
+    background .25s ease;
+}
+
+
+.arcana-video-close:hover {
+  color: #fff0bb;
+
+  background:
+    rgba(216,181,106,.12);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.arcana-video-header {
+  padding:
+    20px
+    55px
+    18px
+    25px;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.06);
+}
+
+
+.arcana-video-number {
+  color:
+    rgba(216,181,106,.55);
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size: 11px;
+
+  letter-spacing: .25em;
+}
+
+
+.arcana-video-title {
+  margin-top: 5px;
+
+  color: #f3dfad;
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size: 27px;
+}
+
+
+/* =========================================
+   PLAYER
+========================================= */
+
+.arcana-video-player {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  background: #000;
+
+  overflow: hidden;
+  
+}
+
+
+.arcana-video-player iframe {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+
+  display: none;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.arcana-video-loading {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color:
+    rgba(238,231,215,.55);
+
+  font-size: 12px;
+
+  letter-spacing: .15em;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.arcana-video-error {
+  position: absolute;
+
+  inset: 0;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  text-align: center;
+
+  color: #e88967;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .arcana-video-modal {
+    padding: 10px;
+  }
+
+  .arcana-video-box {
+    width: 100%;
+  }
+
+  .arcana-video-header {
+    padding:
+      15px
+      50px
+      14px
+      18px;
+  }
+
+  .arcana-video-title {
+    font-size: 22px;
+  }
+
+}
+/* =====================================================
+   ATMOSPHERIC ARCANA VIDEO
+===================================================== */
+
+.arcana-video-modal {
+    --arcana-main: 216, 181, 106;
+    --arcana-secondary: 255, 220, 150;
+    --arcana-bg: 8, 7, 5;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(var(--arcana-main), .10) 0%,
+            rgba(var(--arcana-bg), .90) 48%,
+            rgba(0, 0, 0, .98) 100%
+        );
+
+    transition:
+        opacity .5s ease,
+        visibility .5s ease,
+        background 1.2s ease;
+}
+
+
+/* =====================================================
+   VIDEO BOX
+===================================================== */
+
+.arcana-video-box {
+    position: relative;
+
+    isolation: isolate;
+
+    border: 1px solid
+        rgba(var(--arcana-main), .42);
+
+    box-shadow:
+        0 0 25px
+            rgba(var(--arcana-main), .16),
+
+        0 0 70px
+            rgba(var(--arcana-main), .10),
+
+        0 35px 120px
+            rgba(0, 0, 0, .90);
+
+    transition:
+        box-shadow 1s ease,
+        border-color 1s ease;
+}
+
+
+/* =====================================================
+   ATMOSPHERIC AURA
+===================================================== */
+
+.arcana-video-box::before,
+.arcana-video-box::after {
+
+    content: "";
+
+    position: absolute;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    border-radius: inherit;
+
+}
+
+
+/* Большое внешнее свечение */
+
+.arcana-video-box::before {
+
+    inset: -55px;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(var(--arcana-main), .18) 0%,
+            rgba(var(--arcana-main), .08) 35%,
+            transparent 70%
+        );
+
+    filter: blur(30px);
+
+    opacity: .8;
+
+    animation:
+        arcanaAura 6s ease-in-out infinite;
+}
+
+
+/* Очень мягкий второй ореол */
+
+.arcana-video-box::after {
+
+    inset: -20px;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(var(--arcana-secondary), .12),
+            transparent 68%
+        );
+
+    filter: blur(22px);
+
+    opacity: .6;
+
+    animation:
+        arcanaAuraSecondary 9s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   AURA ANIMATION
+===================================================== */
+
+@keyframes arcanaAura {
+
+    0%,
+    100% {
+        transform: scale(.96);
+        opacity: .55;
+    }
+
+    50% {
+        transform: scale(1.035);
+        opacity: .90;
+    }
+
+}
+
+
+@keyframes arcanaAuraSecondary {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: .40;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: .75;
+    }
+
+}
+
+
+/* =====================================================
+   PLAYER
+===================================================== */
+
+.arcana-video-player {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(var(--arcana-main), .055),
+            #000 70%
+        );
+
+    box-shadow:
+        inset 0 0 80px
+            rgba(var(--arcana-main), .07);
+}
+
+
+/* =====================================================
+   INNER GLOW
+===================================================== */
+
+.arcana-video-player::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 2;
+
+    border: 1px solid
+        rgba(var(--arcana-main), .12);
+
+    box-shadow:
+        inset 0 0 45px
+            rgba(var(--arcana-main), .08);
+
+}
+
+
+/* =====================================================
+   MOVING LIGHT
+===================================================== */
+
+.arcana-video-aura {
+
+    position: absolute;
+
+    width: 55%;
+    height: 100%;
+
+    top: 0;
+    left: -65%;
+
+    pointer-events: none;
+
+    z-index: 3;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(var(--arcana-secondary), .055),
+            transparent
+        );
+
+    filter: blur(25px);
+
+    transform: skewX(-15deg);
+
+    animation:
+        arcanaLight 12s ease-in-out infinite;
+}
+
+
+@keyframes arcanaLight {
+
+    0% {
+        left: -70%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: .7;
+    }
+
+    50% {
+        left: 110%;
+        opacity: .35;
+    }
+
+    65% {
+        opacity: 0;
+    }
+
+    100% {
+        left: 110%;
+        opacity: 0;
+    }
+
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.arcana-video-title {
+
+    color:
+        rgba(var(--arcana-secondary), 1);
+
+    text-shadow:
+        0 0 18px
+        rgba(var(--arcana-main), .30);
+
+    transition:
+        color 1s ease,
+        text-shadow 1s ease;
+}
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+.arcana-video-number {
+
+    color:
+        rgba(var(--arcana-main), .65);
+
+    text-shadow:
+        0 0 15px
+        rgba(var(--arcana-main), .30);
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.arcana-video-close {
+
+    border-radius: 50%;
+
+    transition:
+        color .3s ease,
+        background .3s ease,
+        box-shadow .3s ease;
+}
+
+
+.arcana-video-close:hover {
+
+    color: #fff;
+
+    background:
+        rgba(var(--arcana-main), .15);
+
+    box-shadow:
+        0 0 20px
+        rgba(var(--arcana-main), .25);
+}
+
+
+/* =====================================================
+   ELEMENT THEMES
+===================================================== */
+
+
+/* 🔥 ОГОНЬ */
+
+.arcana-video-modal.element-fire {
+
+    --arcana-main: 218, 72, 42;
+    --arcana-secondary: 255, 190, 82;
+    --arcana-bg: 18, 5, 3;
+}
+
+
+.arcana-video-modal.element-fire
+.arcana-video-box {
+
+    box-shadow:
+        0 0 30px rgba(218,72,42,.25),
+        0 0 100px rgba(218,72,42,.12),
+        0 35px 120px rgba(0,0,0,.9);
+}
+
+
+/* 💧 ВОДА */
+
+.arcana-video-modal.element-water {
+
+    --arcana-main: 55, 135, 205;
+    --arcana-secondary: 135, 210, 255;
+    --arcana-bg: 3, 10, 18;
+}
+
+
+/* 🌬 ВОЗДУХ */
+
+.arcana-video-modal.element-air {
+
+    --arcana-main: 135, 180, 205;
+    --arcana-secondary: 215, 240, 255;
+    --arcana-bg: 7, 11, 15;
+}
+
+
+/* 🌍 ЗЕМЛЯ */
+
+.arcana-video-modal.element-earth {
+
+    --arcana-main: 125, 145, 65;
+    --arcana-secondary: 210, 190, 105;
+    --arcana-bg: 9, 10, 5;
+}
+
+
+/* ✨ ДУХ */
+
+.arcana-video-modal.element-spirit {
+
+    --arcana-main: 137, 90, 205;
+    --arcana-secondary: 235, 200, 255;
+    --arcana-bg: 10, 5, 18;
+}
+
+  </style>
+</head>
+
+<body>
+
+  <div class="ambient water"></div>
+  <div class="ambient air"></div>
+  <div class="ambient fire"></div>
+
+  <div class="page">
+
+    <header class="header">
+
+      <div class="eyebrow">
+        Путь сознания
+      </div>
+
+      <h1>
+        Древо Сефирот
+      </h1>
+
+      <p>
+        10 Сефирот · 22 пути · пространство внутреннего исследования
+      </p>
+
+    </header>
+
+
+    <main class="layout">
+
+      <!-- =====================================
+           TREE
+      ====================================== -->
+
+      <section class="tree-container">
+
+        <div class="tree-aura"></div>
+
+        <div class="tree">
+
+          <!-- ELEMENT LABELS -->
+
+          <div class="element-label water">
+            ВОДА
+          </div>
+
+          <div class="element-label fire">
+            ОГОНЬ
+          </div>
+
+          <div class="element-label air">
+            ВОЗДУХ
+          </div>
+
+
+          <!-- CENTRAL FIRE -->
+
+          <div class="fire-pillar"></div>
+
+
+          <!-- SIDE CHANNELS -->
+
+          <div class="element-channel water"></div>
+          <div class="element-channel air"></div>
+
+
+          <!-- =================================
+               PATHS
+          ================================== -->
+
+          <div
+  class="path p1 path-air"
+  data-id="1"
+  data-name="Маг"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p2 path-water"
+  data-id="2"
+  data-name="Жрица"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p3 path-fire"
+  data-id="3"
+  data-name="Императрица"
+  data-element="Огонь">
+</div>
+
+<div
+  class="path p4 path-earth"
+  data-id="4"
+  data-name="Император"
+  data-element="Земля">
+</div>
+
+<div
+  class="path p5 path-air"
+  data-id="5"
+  data-name="Иерофант"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p6 path-air"
+  data-id="6"
+  data-name="Влюблённые"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p7 path-water"
+  data-id="7"
+  data-name="Колесница"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p8 path-water"
+  data-id="8"
+  data-name="Сила"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p9 path-earth"
+  data-id="9"
+  data-name="Отшельник"
+  data-element="Земля">
+</div>
+
+<div
+  class="path p10 path-air"
+  data-id="10"
+  data-name="Колесо Фортуны"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p11 path-air"
+  data-id="11"
+  data-name="Правосудие"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p12 path-water"
+  data-id="12"
+  data-name="Повешенный"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p13 path-water"
+  data-id="13"
+  data-name="Смерть"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p14 path-air"
+  data-id="14"
+  data-name="Умеренность"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p15 path-fire"
+  data-id="15"
+  data-name="Дьявол"
+  data-element="Огонь">
+</div>
+
+<div
+  class="path p16 path-water"
+  data-id="16"
+  data-name="Башня"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p17 path-earth"
+  data-id="17"
+  data-name="Звезда"
+  data-element="Земля">
+</div>
+
+<div
+  class="path p18 path-air"
+  data-id="18"
+  data-name="Луна"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p19 path-air"
+  data-id="19"
+  data-name="Солнце"
+  data-element="Воздух">
+</div>
+
+<div
+  class="path p20 path-water"
+  data-id="20"
+  data-name="Суд"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p21 path-water"
+  data-id="21"
+  data-name="Мир"
+  data-element="Вода">
+</div>
+
+<div
+  class="path p22 path-fire"
+  data-id="22"
+  data-name="Дурак"
+  data-element="Огонь">
+</div>
+
+
+
+          <!-- =================================
+               SEPHIROT
+          ================================== -->
+
+          <div class="sephira s-keter">
+            <span class="sephira-hebrew">כתר</span>
+            <span class="sephira-name">Кетер</span>
+          </div>
+
+          <div class="sephira s-chokmah">
+            <span class="sephira-hebrew">חכמה</span>
+            <span class="sephira-name">Хокма</span>
+          </div>
+
+          <div class="sephira s-binah">
+            <span class="sephira-hebrew">בינה</span>
+            <span class="sephira-name">Бина</span>
+          </div>
+
+          <div class="sephira s-chesed">
+            <span class="sephira-hebrew">חסד</span>
+            <span class="sephira-name">Хесед</span>
+          </div>
+
+          <div class="sephira s-gevurah">
+            <span class="sephira-hebrew">גבורה</span>
+            <span class="sephira-name">Гебура</span>
+          </div>
+
+          <div class="sephira s-tiferet">
+            <span class="sephira-hebrew">תפארת</span>
+            <span class="sephira-name">Тиферет</span>
+          </div>
+
+          <div class="sephira s-netzach">
+            <span class="sephira-hebrew">נצח</span>
+            <span class="sephira-name">Нецах</span>
+          </div>
+
+          <div class="sephira s-hod">
+            <span class="sephira-hebrew">הוד</span>
+            <span class="sephira-name">Ход</span>
+          </div>
+
+          <div class="sephira s-yesod">
+            <span class="sephira-hebrew">יסוד</span>
+            <span class="sephira-name">Есод</span>
+          </div>
+
+          <div class="sephira s-malkuth">
+            <span class="sephira-hebrew">מלכות</span>
+            <span class="sephira-name">Малькут</span>
+          </div>
+
+        </div>
+
+
+        <div class="tree-hint">
+          ✦ &nbsp; Нажмите на канал, чтобы войти в Аркан
+        </div>
+
+      </section>
+
+
+      <!-- =====================================
+           PANEL
+      ====================================== -->
+
+      <aside class="panel" id="panel">
+
+        <div class="empty-panel">
+
+          <div class="empty-symbol">
+            ✦
+          </div>
+
+          <h2>
+            Выберите путь
+          </h2>
+
+          <p>
+            Нажмите на один из 22 путей Древа,
+            чтобы открыть пространство
+            соответствующего Аркана.
+          </p>
+
+        </div>
+
+
+        <div class="arcana-content">
+
+          <button
+            class="close"
+            id="closePanel">
+            ×
+          </button>
+
+
+          <div
+            class="arcana-number"
+            id="arcanaNumber">
+            01
+          </div>
+
+
+          <div class="arcana-symbol">
+
+            <div class="ring one"></div>
+
+            <div class="ring two"></div>
+
+            <div class="symbol-center">
+              ✦
+            </div>
+
+          </div>
+
+
+          <div class="arcana-label">
+            СТАРШИЙ АРКАН
+          </div>
+<img
+    class="arcana-image"
+    id="arcanaImage"
+    src="/static/images/arcana-01.jpg"
+    alt="Аркан"
+>
+
+
+          <h2
+            class="arcana-title"
+            id="arcanaTitle">
+            Маг
+          </h2>
+
+
+          <p
+            class="arcana-description"
+            id="arcanaDescription">
+            Пространство изучения и
+            практического включения
+            в энергию Аркана.
+          </p>
+
+
+          <button
+            class="activate"
+            id="activateButton">
+            ✦ &nbsp; ВКЛЮЧИТЬСЯ В АРКАН
+          </button>
+
+
+          <div class="lessons">
+
+            <div class="lesson">
+
+              <div class="lesson-number">
+                01
+              </div>
+
+              <div>
+
+                <div class="lesson-title">
+                  Введение
+                </div>
+
+                <span class="lesson-type">
+                  Запись урока
+                </span>
+
+              </div>
+
+              <div class="lesson-play">
+                ▶
+              </div>
+
+            </div>
+
+
+            <div class="lesson">
+
+              <div class="lesson-number">
+                02
+              </div>
+
+              <div>
+
+                <div class="lesson-title">
+                  Теория
+                </div>
+
+                <span class="lesson-type">
+                  Материалы урока
+                </span>
+
+              </div>
+
+              <div class="lesson-play">
+                ▶
+              </div>
+
+            </div>
+
+
+            <div class="lesson">
+
+              <div class="lesson-number">
+                03
+              </div>
+
+              <div>
+
+                <div class="lesson-title">
+                  Практика
+                </div>
+
+                <span class="lesson-type">
+                  Аудио включения
+                </span>
+
+              </div>
+
+              <div class="lesson-play">
+                ▶
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================
+       TOOLTIP
+  ====================================== -->
+
+  <div
+    class="path-info"
+    id="pathInfo">
+  </div>
+
+
+  <!-- =====================================
+       ACTIVATION
+  ====================================== -->
+
+  <div
+    class="activation"
+    id="activation">
+
+    <div class="activation-inner">
+
+      <div class="activation-symbol">
+
+        <div class="activation-star">
+          ✦
+        </div>
+
+      </div>
+
+      <div class="activation-title">
+        Включение в Аркан
+      </div>
+
+      <div
+        class="activation-subtitle"
+        id="activationName">
+        Маг
+      </div>
+
+      <div class="activation-progress"></div>
+
+    </div>
+
+  </div>
+
+<!-- 
+  <script>
+
+    /* =====================================
+       ARCANA
+    ===================================== */
+
+    /* =====================================
+   ARCANA
+   Стилистика карточки определяется
+   параметром element каждого пути
+===================================== */
+
+const ARCANA = {
+
+  1: {
+    name: "Маг",
+    element: "air",
+    description:
+      "Воля, намерение, действие и способность направлять энергию сознательно."
+  },
+
+  2: {
+    name: "Жрица",
+    element: "water",
+    description:
+      "Интуиция, внутреннее знание, тишина и контакт с глубинным восприятием."
+  },
+
+  3: {
+    name: "Императрица",
+    element: "fire",
+    description:
+      "Творчество, плодородие, проявление и способность создавать новую форму."
+  },
+
+  4: {
+    name: "Император",
+    element: "earth",
+    description:
+      "Структура, порядок, ответственность и управление собственной реальностью."
+  },
+
+  5: {
+    name: "Иерофант",
+    element: "air",
+    description:
+      "Знание традиции, обучение, передача опыта и поиск внутреннего наставника."
+  },
+
+  6: {
+    name: "Влюблённые",
+    element: "air",
+    description:
+      "Выбор, соединение противоположностей и осознанное принятие решения."
+  },
+
+  7: {
+    name: "Колесница",
+    element: "water",
+    description:
+      "Движение, направление силы, концентрация и достижение поставленной цели."
+  },
+
+  8: {
+    name: "Сила",
+    element: "water",
+    description:
+      "Внутренняя мощь, управление импульсом и соединение силы с осознанностью."
+  },
+
+  9: {
+    name: "Отшельник",
+    element: "earth",
+    description:
+      "Углубление, исследование себя, тишина и поиск собственного света."
+  },
+
+  10: {
+    name: "Колесо Фортуны",
+    element: "air",
+    description:
+      "Циклы, перемены, движение процессов и способность видеть закономерность."
+  },
+
+  11: {
+    name: "Правосудие",
+    element: "air",
+    description:
+      "Баланс, ответственность, причинность и честное взаимодействие с собой."
+  },
+
+  12: {
+    name: "Повешенный",
+    element: "water",
+    description:
+      "Изменение точки зрения, остановка, принятие и выход за привычное восприятие."
+  },
+
+  13: {
+    name: "Смерть",
+    element: "water",
+    description:
+      "Завершение старого цикла, трансформация и освобождение пространства."
+  },
+
+  14: {
+    name: "Умеренность",
+    element: "air",
+    description:
+      "Гармония, соединение противоположностей и восстановление внутреннего равновесия."
+  },
+
+  15: {
+    name: "Дьявол",
+    element: "fire",
+    description:
+      "Исследование привязанностей, желаний, ограничений и личной силы."
+  },
+
+  16: {
+    name: "Башня",
+    element: "water",
+    description:
+      "Разрушение устаревших конструкций и освобождение от ложных опор."
+  },
+
+  17: {
+    name: "Звезда",
+    element: "earth",
+    description:
+      "Надежда, вдохновение, направление и тонкая связь с внутренним светом."
+  },
+
+  18: {
+    name: "Луна",
+    element: "air",
+    description:
+      "Подсознание, символы, страхи, интуиция и исследование скрытых процессов."
+  },
+
+  19: {
+    name: "Солнце",
+    element: "air",
+    description:
+      "Ясность, проявленность, жизненная сила и открытое выражение себя."
+  },
+
+  20: {
+    name: "Суд",
+    element: "water",
+    description:
+      "Пробуждение, переоценка прошлого и переход к новому уровню осознанности."
+  },
+
+  21: {
+    name: "Мир",
+    element: "water",
+    description:
+      "Целостность, завершение цикла и интеграция полученного опыта."
+  },
+
+  22: {
+    name: "Дурак",
+    element: "fire",
+    description:
+      "Свобода, начало пути, открытость неизвестному и доверие движению жизни."
+  }
+
+};
+
+
+
+    /* =====================================
+       ELEMENT COLORS
+    ===================================== */
+
+    const ELEMENT_COLORS = {
+
+      fire: {
+        color: "#ff7138",
+        light: "#ffc06b",
+        glow: "rgba(255,91,42,.72)"
+      },
+
+      water: {
+        color: "#368eea",
+        light: "#7dc8ff",
+        glow: "rgba(43,139,255,.72)"
+      },
+
+      air: {
+        color: "#9ce8ff",
+        light: "#e7fbff",
+        glow: "rgba(133,225,255,.68)"
+      },
+
+      earth: {
+        color: "#8aa65b",
+        light: "#c9dd91",
+        glow: "rgba(138,166,91,.55)"
+      },
+
+      spirit: {
+        color: "#d9c5ff",
+        light: "#fff3ce",
+        glow: "rgba(217,197,255,.6)"
+      }
+
+    };
+
+
+    /* =====================================
+       DOM
+    ===================================== */
+
+    const paths =
+      document.querySelectorAll(".path");
+
+    const panel =
+      document.getElementById("panel");
+
+    const arcanaContent =
+      document.querySelector(
+        ".arcana-content"
+      );
+
+    const arcanaNumber =
+      document.getElementById(
+        "arcanaNumber"
+      );
+
+    const arcanaTitle =
+      document.getElementById(
+        "arcanaTitle"
+      );
+
+    const arcanaDescription =
+      document.getElementById(
+        "arcanaDescription"
+      );
+
+    const activation =
+      document.getElementById(
+        "activation"
+      );
+
+    const activationName =
+      document.getElementById(
+        "activationName"
+      );
+
+    const activateButton =
+      document.getElementById(
+        "activateButton"
+      );
+
+    const closePanel =
+      document.getElementById(
+        "closePanel"
+      );
+
+    const pathInfo =
+      document.getElementById(
+        "pathInfo"
+      );
+
+
+    /* =====================================
+       APPLY ARCANA COLOR
+    ===================================== */
+
+    function applyElementTheme(element) {
+
+      const theme =
+        ELEMENT_COLORS[element] ||
+        ELEMENT_COLORS.spirit;
+
+      arcanaContent.style.setProperty(
+        "--arcana-color",
+        theme.color
+      );
+
+      arcanaContent.style.setProperty(
+        "--arcana-light",
+        theme.light
+      );
+
+      arcanaContent.style.setProperty(
+        "--arcana-glow",
+        theme.glow
+      );
+
+      activation.style.setProperty(
+        "--activation-color",
+        theme.color
+      );
+
+      activation.style.setProperty(
+        "--activation-light",
+        theme.light
+      );
+
+    }
+
+
+    /* =====================================
+       OPEN ARCANA
+    ===================================== */
+
+    function openArcana(id) {
+
+      const arcana =
+        ARCANA[id];
+
+      if (!arcana) return;
+
+      arcanaNumber.textContent =
+        String(id).padStart(2, "0");
+
+      arcanaTitle.textContent =
+        arcana.name;
+
+      arcanaDescription.textContent =
+        arcana.description;
+
+      activationName.textContent =
+        arcana.name;
+
+      applyElementTheme(
+        arcana.element
+      );
+
+      panel.classList.add(
+        "has-arcana"
+      );
+
+      paths.forEach(path => {
+
+        path.classList.remove(
+          "active"
+        );
+
+      });
+
+      const current =
+        document.querySelector(
+          `.path[data-id="${id}"]`
+        );
+
+      if (current) {
+
+        current.classList.add(
+          "active"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================
+       PATH EVENTS
+    ===================================== */
+
+    paths.forEach(path => {
+
+      path.addEventListener(
+        "mouseenter",
+        () => {
+
+          const id =
+            path.dataset.id;
+
+          const name =
+            path.dataset.name;
+
+          const element =
+            path.dataset.element;
+
+          pathInfo.textContent =
+            `${String(id).padStart(2, "0")} · ${name} · ${element}`;
+
+          pathInfo.classList.add(
+            "show"
+          );
+
+        }
+      );
+
+
+      path.addEventListener(
+        "mousemove",
+        event => {
+
+          pathInfo.style.left =
+            `${event.clientX + 16}px`;
+
+          pathInfo.style.top =
+            `${event.clientY + 16}px`;
+
+        }
+      );
+
+
+      path.addEventListener(
+        "mouseleave",
+        () => {
+
+          pathInfo.classList.remove(
+            "show"
+          );
+
+        }
+      );
+
+
+  path.addEventListener(
+  "click",
+  () => {
+
+    openArcanaAccess(
+      Number(path.dataset.id)
+    );
+
+  }
+);
+/* =====================================
+   ARCANA ACCESS MODAL
+===================================== */
+
+const arcanaAccessModal =
+  document.getElementById(
+    "arcanaAccessModal"
+  );
+
+const arcanaAccessClose =
+  document.getElementById(
+    "arcanaAccessClose"
+  );
+
+const arcanaAccessPassword =
+  document.getElementById(
+    "arcanaAccessPassword"
+  );
+
+const arcanaAccessSubmit =
+  document.getElementById(
+    "arcanaAccessSubmit"
+  );
+
+const arcanaAccessError =
+  document.getElementById(
+    "arcanaAccessError"
+  );
+
+const accessArcanaNumber =
+  document.getElementById(
+    "accessArcanaNumber"
+  );
+
+const accessArcanaTitle =
+  document.getElementById(
+    "accessArcanaTitle"
+  );
+
+
+let requestedArcanaId = null;
+
+
+/* =====================================
+   OPEN ACCESS WINDOW
+===================================== */
+
+function openArcanaAccess(id) {
+
+  const arcana =
+    ARCANA[id];
+
+  if (!arcana) return;
+
+  requestedArcanaId = id;
+
+  accessArcanaNumber.textContent =
+    String(id).padStart(2, "0");
+
+  accessArcanaTitle.textContent =
+    arcana.name;
+
+  arcanaAccessPassword.value = "";
+
+  arcanaAccessError.textContent = "";
+
+  arcanaAccessModal.classList.add(
+    "show"
+  );
+
+  setTimeout(() => {
+
+    arcanaAccessPassword.focus();
+
+  }, 300);
+}
+
+
+/* =====================================
+   CLOSE
+===================================== */
+
+function closeArcanaAccess() {
+
+  arcanaAccessModal.classList.remove(
+    "show"
+  );
+
+  requestedArcanaId = null;
+
+  arcanaAccessPassword.value = "";
+
+  arcanaAccessError.textContent = "";
+}
+
+
+arcanaAccessClose.addEventListener(
+  "click",
+  closeArcanaAccess
+);
+
+
+/* =====================================
+   CLICK OUTSIDE
+===================================== */
+
+arcanaAccessModal.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      arcanaAccessModal
+    ) {
+
+      closeArcanaAccess();
+
+    }
+
+  }
+);
+
+
+/* =====================================
+   CHECK PASSWORD
+===================================== */
+
+async function submitArcanaAccess() {
+
+  if (!requestedArcanaId) return;
+
+  const password =
+    arcanaAccessPassword.value.trim();
+
+  if (!password) {
+
+    arcanaAccessError.textContent =
+      "Введите код доступа.";
+
+    return;
+  }
+
+  arcanaAccessSubmit.disabled = true;
+
+  arcanaAccessError.textContent =
+    "Проверка доступа…";
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/arcana/access",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            arcana_id:
+              requestedArcanaId,
+
+            password:
+              password
+
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+
+      arcanaAccessError.textContent =
+        data.detail ||
+        "Доступ запрещён.";
+
+      arcanaAccessSubmit.disabled =
+        false;
+
+      return;
+    }
+
+    const id =
+      requestedArcanaId;
+
+    closeArcanaAccess();
+
+    openArcana(id);
+
+  } catch (error) {
+
+    console.error(error);
+
+    arcanaAccessError.textContent =
+      "Ошибка соединения с сервером.";
+
+  }
+
+  arcanaAccessSubmit.disabled =
+    false;
+}
+
+
+arcanaAccessSubmit.addEventListener(
+  "click",
+  submitArcanaAccess
+);
+
+
+/* =====================================
+   ENTER
+===================================== */
+
+arcanaAccessPassword.addEventListener(
+  "keydown",
+  event => {
+
+    if (event.key === "Enter") {
+
+      submitArcanaAccess();
+
+    }
+
+    if (event.key === "Escape") {
+
+      closeArcanaAccess();
+
+    }
+
+  }
+);
+
+
+async function requestArcanaAccess(id) {
+
+  const arcana =
+    ARCANA[id];
+
+  if (!arcana) return;
+
+  const password =
+    prompt(
+      `Введите персональный код доступа к Аркану "${arcana.name}":`
+    );
+
+  if (!password) return;
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/arcana/access",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            arcana_id: id,
+            password: password
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+
+      alert(
+        data.detail ||
+        "Доступ запрещён"
+      );
+
+      return;
+    }
+
+    // Пароль правильный.
+    // Теперь открываем Аркан.
+
+    openArcana(id);
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Не удалось связаться с сервером"
+    );
+
+  }
+
+}
+
+
+    });
+
+
+    /* =====================================
+       CLOSE PANEL
+    ===================================== */
+
+    closePanel.addEventListener(
+      "click",
+      () => {
+
+        panel.classList.remove(
+          "has-arcana"
+        );
+
+        paths.forEach(path => {
+
+          path.classList.remove(
+            "active"
+          );
+
+        });
+
+      }
+    );
+
+
+    /* =====================================
+       ACTIVATION
+    ===================================== */
+
+    activateButton.addEventListener(
+      "click",
+      () => {
+
+        const id =
+          Number(
+            arcanaNumber.textContent
+          );
+
+        const arcana =
+          ARCANA[id];
+
+        if (!arcana) return;
+
+        activationName.textContent =
+          arcana.name;
+
+        activateButton.classList.add(
+          "activating"
+        );
+
+        activation.classList.add(
+          "show"
+        );
+
+        setTimeout(
+          () => {
+
+            activation.classList.remove(
+              "show"
+            );
+
+            activateButton.classList.remove(
+              "activating"
+            );
+
+          },
+          1900
+        );
+
+      }
+    );
+
+
+    /* =====================================
+       ESC
+    ===================================== */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Escape") {
+
+          activation.classList.remove(
+            "show"
+          );
+
+          panel.classList.remove(
+            "has-arcana"
+          );
+
+          paths.forEach(path => {
+
+            path.classList.remove(
+              "active"
+            );
+
+          });
+
+        }
+
+      }
+    );
+
+  </script> -->
+<!-- =========================================
+     ARCANA ACCESS MODAL
+========================================= -->
+
+
+<div class="arcana-access-modal" id="arcanaAccessModal">
+
+  <div class="arcana-access-box">
+
+    <button
+      class="arcana-access-close"
+      id="arcanaAccessClose">
+      ×
+    </button>
+
+    <div class="arcana-access-symbol">
+      ✦
+    </div>
+
+    <div
+      class="arcana-access-number"
+      id="accessArcanaNumber">
+      01
+    </div>
+
+    <div
+      class="arcana-access-title"
+      id="accessArcanaTitle">
+      Маг
+    </div>
+
+    <div class="arcana-access-label">
+      ДОСТУП К АРКАНУ
+    </div>
+
+    <p>
+      Введите персональный код,
+      предоставленный вам для этого Аркана.
+    </p>
+
+    <input
+      type="password"
+      id="arcanaAccessPassword"
+      placeholder="Персональный код"
+      autocomplete="off"
+    />
+
+    <div
+      class="arcana-access-error"
+      id="arcanaAccessError">
+    </div>
+
+    <button
+      class="arcana-access-submit"
+      id="arcanaAccessSubmit">
+
+      ✦ &nbsp; ОТКРЫТЬ АРКАН
+
+    </button>
+
+  </div>
+
+</div>
+<!-- =========================================
+     ARCANA VIDEO MODAL
+========================================= -->
+
+<div
+  class="arcana-video-modal"
+  id="arcanaVideoModal"
+>
+
+  <div
+  class="arcana-video-box"
+  id="arcanaVideoBox"
+>
+
+
+    <button
+      class="arcana-video-close"
+      id="arcanaVideoClose"
+      type="button"
+      aria-label="Закрыть">
+      ×
+    </button>
+
+
+    <div class="arcana-video-header">
+
+      <div
+        class="arcana-video-number"
+        id="arcanaVideoNumber">
+        01
+      </div>
+
+      <div
+        class="arcana-video-title"
+        id="arcanaVideoTitle">
+        Маг
+      </div>
+
+    </div>
+
+
+    <div class="arcana-video-player">
+<div
+  class="arcana-video-aura"
+  id="arcanaVideoAura">
+</div>
+      <div
+        class="arcana-video-loading"
+        id="arcanaVideoLoading">
+        Загрузка видео…
+      </div>
+
+      <div
+        class="arcana-video-error"
+        id="arcanaVideoError">
+      </div>
+
+      <iframe
+        id="arcanaVideoIframe"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/admin.js"></script>
+<script src="/static/js/tree.js"></script>
+
+
+</body>
+</html>
