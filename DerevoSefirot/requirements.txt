@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-sqlalchemy
-argon2-cffi
-itsdangerous
-python-multipart
-pydantic[email]
